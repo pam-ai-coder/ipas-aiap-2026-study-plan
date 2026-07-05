@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>iPAS 備考追蹤與資源中心</title>
+<title>iPAS 備考月曆與資源中心</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -20,123 +20,84 @@
     --amber-light:#F5E9D6;
   }
   *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Noto Sans TC',sans-serif;
-    padding:24px 16px 60px;
-  }
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans TC',sans-serif;padding:24px 14px 60px;}
   .wrap{max-width:720px;margin:0 auto;}
-  h1{
-    font-family:'Noto Serif TC',serif;
-    font-weight:700;
-    font-size:24px;
-    margin:0 0 4px;
-  }
+  h1{font-family:'Noto Serif TC',serif;font-weight:700;font-size:24px;margin:0 0 4px;}
   .sub{color:var(--ink-soft);font-size:13px;margin:0 0 20px;}
-  .section-label{
-    font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;
-    color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;
-    margin:26px 0 10px;
-  }
+  .section-label{font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;margin:26px 0 10px;}
   .top-row{display:flex;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
-  .stat-card{
-    flex:1;min-width:130px;
-    background:var(--paper);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:14px 16px;
-  }
+  .stat-card{flex:1;min-width:130px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
   .stat-num{font-family:'Noto Serif TC',serif;font-weight:700;font-size:28px;line-height:1;}
   .stat-label{font-size:12px;color:var(--ink-soft);margin-top:6px;}
-  .progress-bar-outer{
-    height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:10px;
-  }
+  .progress-bar-outer{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:10px;}
   .progress-bar-inner{height:100%;background:var(--jade);border-radius:4px;transition:width .3s;}
 
-  .res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
-  .res-card{
-    display:block;background:var(--paper);border:1px solid var(--line);border-radius:10px;
-    padding:12px 14px;text-decoration:none;color:var(--ink);
+  .tab-row{display:flex;gap:6px;margin-bottom:10px;}
+  .tab-btn{
+    flex:1;background:var(--paper);border:1px solid var(--line);border-radius:8px;
+    padding:9px 12px;font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:500;
+    color:var(--ink-soft);cursor:pointer;
   }
-  .res-card:active{background:var(--jade-light);}
+  .tab-btn.active{background:var(--jade);color:#fff;border-color:var(--jade);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+  .res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+  .res-card{display:block;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-decoration:none;color:var(--ink);}
   .res-card .res-num{font-family:'Noto Serif TC',serif;font-weight:700;color:var(--jade);font-size:13px;}
   .res-card .res-name{font-size:13px;font-weight:500;margin-top:3px;line-height:1.3;}
   .res-files{margin-top:10px;display:flex;flex-direction:column;gap:8px;}
-  .res-file-link{
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-    background:var(--paper);border:1px solid var(--line);border-radius:8px;
-    padding:10px 14px;text-decoration:none;color:var(--ink);font-size:13px;
-  }
+  .res-file-link{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:13px;}
   .res-file-link span.arrow{color:var(--ink-soft);}
 
-  .today-card{
-    position:relative;
-    background:var(--paper);
-    border:1px solid var(--line);
-    border-left:5px solid var(--amber);
-    border-radius:10px;
-    padding:18px 20px 14px;
-    margin-bottom:26px;
+  .month-block{margin-bottom:18px;}
+  .month-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:15px;margin:0 0 8px;}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+  .cal-wd{text-align:center;font-size:11px;color:var(--ink-soft);padding:2px 0;}
+  .cal-day{
+    aspect-ratio:1;border-radius:8px;background:var(--paper);border:1px solid var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-size:12px;cursor:default;position:relative;
   }
-  .today-tab{
-    position:absolute;top:-10px;left:18px;
-    background:var(--amber);color:#fff;
-    font-size:12px;font-weight:500;
-    padding:3px 12px;border-radius:0 0 6px 6px;
-  }
-  .today-title{
-    font-family:'Noto Serif TC',serif;font-weight:700;font-size:18px;margin:10px 0 2px;
-  }
-  .today-range{color:var(--ink-soft);font-size:13px;margin-bottom:12px;}
-  .task{
-    display:flex;align-items:flex-start;gap:10px;
-    padding:8px 0;border-bottom:1px dashed var(--line);
-    font-size:14px;
-  }
-  .task:last-child{border-bottom:none;}
-  .task input{margin-top:4px;width:17px;height:17px;accent-color:var(--jade);cursor:pointer;flex-shrink:0;}
+  .cal-day.empty{background:transparent;border:none;}
+  .cal-day.has-task{cursor:pointer;}
+  .cal-day.has-task:active{background:var(--jade-light);}
+  .cal-day.is-today{border:2px solid var(--amber);}
+  .cal-day.is-selected{background:var(--jade-light);border-color:var(--jade);}
+  .cal-day .dnum{font-weight:500;}
+  .cal-day .dot{width:5px;height:5px;border-radius:50%;margin-top:2px;background:var(--line);}
+  .cal-day.done .dot{background:var(--jade);}
+  .cal-day.pending .dot{background:var(--amber);}
+  .cal-day.no-task .dnum{color:var(--ink-soft);opacity:.4;}
+
+  .day-card{position:relative;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--amber);border-radius:10px;padding:18px 20px 16px;margin-bottom:26px;}
+  .day-tab{position:absolute;top:-10px;left:18px;background:var(--amber);color:#fff;font-size:12px;font-weight:500;padding:3px 12px;border-radius:0 0 6px 6px;}
+  .day-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:17px;margin:10px 0 2px;}
+  .day-week{color:var(--ink-soft);font-size:13px;margin-bottom:12px;}
+  .task{display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:14px;}
+  .task input{margin-top:3px;width:17px;height:17px;accent-color:var(--jade);cursor:pointer;flex-shrink:0;}
   .task .task-main{flex:1;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
   .task label{cursor:pointer;line-height:1.5;}
   .task.done label{color:var(--ink-soft);text-decoration:line-through;}
-  .task a.res-link{
-    font-size:12px;color:var(--jade);text-decoration:none;border-bottom:1px solid var(--jade-light);
-    white-space:nowrap;
-  }
-  details{
-    background:var(--paper);
-    border:1px solid var(--line);
-    border-radius:10px;
-    margin-bottom:10px;
-    padding:0;
-  }
-  summary{
-    list-style:none;cursor:pointer;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:14px 18px;font-family:'Noto Serif TC',serif;font-weight:500;font-size:15px;
-    gap:8px;
-  }
+  .task a.res-link{font-size:12px;color:var(--jade);text-decoration:none;border-bottom:1px solid var(--jade-light);white-space:nowrap;}
+
+  details{background:var(--paper);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;padding:0;}
+  summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;font-family:'Noto Serif TC',serif;font-weight:500;font-size:15px;gap:8px;}
   summary::-webkit-details-marker{display:none;}
   summary .arrow{transition:transform .2s;color:var(--ink-soft);font-size:13px;}
   details[open] summary .arrow{transform:rotate(90deg);}
   .week-meta{font-size:12px;color:var(--ink-soft);font-weight:400;font-family:'Noto Sans TC',sans-serif;white-space:nowrap;}
-  .week-body{padding:0 18px 16px;}
-  .badge{
-    font-size:11px;padding:2px 9px;border-radius:20px;
-    background:var(--jade-light);color:var(--jade);font-weight:500;
-  }
+  .week-body{padding:4px 18px 16px;}
+  .week-body .task{border-bottom:1px dashed var(--line);}
+  .week-body .task:last-child{border-bottom:none;}
+  .badge{font-size:11px;padding:2px 9px;border-radius:20px;background:var(--jade-light);color:var(--jade);font-weight:500;}
   .badge.current{background:var(--amber-light);color:var(--amber);}
   footer{text-align:center;color:var(--ink-soft);font-size:12px;margin-top:30px;}
-  @media (max-width:420px){
-    h1{font-size:21px;}
-    .stat-num{font-size:24px;}
-  }
+  @media (max-width:420px){h1{font-size:21px;} .stat-num{font-size:24px;} .cal-day{font-size:11px;}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>iPAS AI應用規劃師 備考追蹤</h1>
+  <h1>iPAS AI應用規劃師 備考月曆</h1>
   <p class="sub">初級 · 科目一 人工智慧基礎概論 ／ 科目二 生成式AI應用與規劃</p>
 
   <div class="top-row">
@@ -152,176 +113,204 @@
   </div>
 
   <div class="section-label">資源中心 · Google Drive</div>
-  <div class="res-grid">
-    <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9"><div class="res-num">00</div><div class="res-name">官方資料</div></a>
-    <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1sWbIIm3Eypu_TbITBcwb2oLtfKZcgsFW"><div class="res-num">01</div><div class="res-name">課程講義 0708–0709</div></a>
-    <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7"><div class="res-num">02</div><div class="res-name">考古題</div></a>
-    <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE"><div class="res-num">03</div><div class="res-name">高頻名詞 Top30</div></a>
-    <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY"><div class="res-num">04</div><div class="res-name">錯題本</div></a>
-    <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1aT_fGpSpVNB4wVWeW5U8hOQp0TwsrC3K"><div class="res-num">05</div><div class="res-name">情境題判斷卡</div></a>
-    <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f"><div class="res-num">06</div><div class="res-name">考前總複習</div></a>
-    <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1DhrxrXVtx5f2cbQURtsdfnyv_-mGczaG"><div class="res-num">📁</div><div class="res-name">主資料夾（全部）</div></a>
+  <div class="tab-row" id="res-tabs">
+    <button class="tab-btn active" data-tab="res-folders">資料夾</button>
+    <button class="tab-btn" data-tab="res-files">常用檔案</button>
+  </div>
+  <div class="tab-panel active" id="res-folders">
+    <div class="res-grid">
+      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9"><div class="res-num">00</div><div class="res-name">官方資料</div></a>
+      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1sWbIIm3Eypu_TbITBcwb2oLtfKZcgsFW"><div class="res-num">01</div><div class="res-name">課程講義 0708–0709</div></a>
+      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7"><div class="res-num">02</div><div class="res-name">考古題</div></a>
+      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE"><div class="res-num">03</div><div class="res-name">高頻名詞 Top30</div></a>
+      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY"><div class="res-num">04</div><div class="res-name">錯題本</div></a>
+      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1aT_fGpSpVNB4wVWeW5U8hOQp0TwsrC3K"><div class="res-num">05</div><div class="res-name">情境題判斷卡</div></a>
+      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f"><div class="res-num">06</div><div class="res-name">考前總複習</div></a>
+      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1DhrxrXVtx5f2cbQURtsdfnyv_-mGczaG"><div class="res-num">📁</div><div class="res-name">主資料夾（全部）</div></a>
+    </div>
+  </div>
+  <div class="tab-panel" id="res-files">
+    <div class="res-files">
+      <a class="res-file-link" target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit"><span>進度追蹤／錯題本／記憶卡（Sheets）</span><span class="arrow">›</span></a>
+      <a class="res-file-link" target="_blank" rel="noopener" href="https://docs.google.com/document/d/1fO8I4lK-yOE70kwnmn1HmcU88T1df6kozLXUmuzXJac/edit"><span>7/8–7/9 課程重點筆記（Docs）</span><span class="arrow">›</span></a>
+      <a class="res-file-link" target="_blank" rel="noopener" href="https://drive.google.com/file/d/1AD6o87PVJutmZfqR14XkIbMrKmaN04md/view"><span>官方簡章重點摘要</span><span class="arrow">›</span></a>
+    </div>
   </div>
 
-  <div class="res-files">
-    <a class="res-file-link" target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit"><span>進度追蹤／錯題本／記憶卡（Sheets）</span><span class="arrow">›</span></a>
-    <a class="res-file-link" target="_blank" rel="noopener" href="https://docs.google.com/document/d/1fO8I4lK-yOE70kwnmn1HmcU88T1df6kozLXUmuzXJac/edit"><span>7/8–7/9 課程重點筆記（Docs）</span><span class="arrow">›</span></a>
-    <a class="res-file-link" target="_blank" rel="noopener" href="https://drive.google.com/file/d/1AD6o87PVJutmZfqR14XkIbMrKmaN04md/view"><span>官方簡章重點摘要</span><span class="arrow">›</span></a>
-    <a class="res-file-link" target="_blank" rel="noopener" href="https://drive.google.com/file/d/1gzdGnRHSyGGm8IxHUaNYFzAbfJE12-2l/view"><span>讀書提醒行事曆（.ics）</span><span class="arrow">›</span></a>
+  <div class="section-label">備考月曆</div>
+  <div class="tab-row" id="cal-tabs">
+    <button class="tab-btn active" data-tab="cal-7">7月</button>
+    <button class="tab-btn" data-tab="cal-8">8月</button>
   </div>
+  <div id="calendars"></div>
 
-  <div class="section-label">今天</div>
-  <div class="today-card">
-    <div class="today-tab">今天</div>
-    <div class="today-title" id="today-title">載入中…</div>
-    <div class="today-range" id="today-range"></div>
-    <div id="today-tasks"></div>
-  </div>
+  <div id="day-panel"></div>
 
-  <div class="section-label">六週讀書計畫</div>
+  <div class="section-label">六週讀書計畫（清單檢視）</div>
   <div id="weeks"></div>
 
-  <footer>打勾會自動存在這台裝置的瀏覽器裡；換裝置或清瀏覽器資料會重置。</footer>
+  <footer>打勾會自動存在這台裝置的瀏覽器裡；點月曆上的日期可以查看/勾選當天任務。</footer>
 </div>
 
 <script>
-const DRIVE = {
-  root:'https://drive.google.com/drive/folders/1DhrxrXVtx5f2cbQURtsdfnyv_-mGczaG',
-  f00:'https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9',
-  f01:'https://drive.google.com/drive/folders/1sWbIIm3Eypu_TbITBcwb2oLtfKZcgsFW',
-  f02:'https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7',
-  f03:'https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE',
-  f04:'https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY',
-  f05:'https://drive.google.com/drive/folders/1aT_fGpSpVNB4wVWeW5U8hOQp0TwsrC3K',
-  f06:'https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f',
-  sheet:'https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit',
-  courseDoc:'https://docs.google.com/document/d/1fO8I4lK-yOE70kwnmn1HmcU88T1df6kozLXUmuzXJac/edit',
-  summaryDoc:'https://drive.google.com/file/d/1AD6o87PVJutmZfqR14XkIbMrKmaN04md/view'
-};
+const DAILY_PLAN = [{"y": 2026, "m": 7, "d": 6, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "確認 8/15 報名與繳費", "link": null, "wd": 0}, {"y": 2026, "m": 7, "d": 7, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "建立 Google Drive 備考資料夾", "link": "https://drive.google.com/drive/folders/1DhrxrXVtx5f2cbQURtsdfnyv_-mGczaG", "wd": 1}, {"y": 2026, "m": 7, "d": 8, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "工研院培訓 Day1＋下載官方簡章/考古題", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 2}, {"y": 2026, "m": 7, "d": 9, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "工研院培訓 Day2＋整理課程筆記", "link": "https://docs.google.com/document/d/1fO8I4lK-yOE70kwnmn1HmcU88T1df6kozLXUmuzXJac/edit", "wd": 3}, {"y": 2026, "m": 7, "d": 10, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "建立 Google Sheets 進度表", "link": "https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit", "wd": 4}, {"y": 2026, "m": 7, "d": 11, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "彙整課程重點筆記", "link": "https://docs.google.com/document/d/1fO8I4lK-yOE70kwnmn1HmcU88T1df6kozLXUmuzXJac/edit", "wd": 5}, {"y": 2026, "m": 7, "d": 12, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "Week1 總複習與檢查資料夾", "link": "https://drive.google.com/drive/folders/1DhrxrXVtx5f2cbQURtsdfnyv_-mGczaG", "wd": 6}, {"y": 2026, "m": 7, "d": 13, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "讀 AI 定義與分類、AI 治理概念", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 0}, {"y": 2026, "m": 7, "d": 14, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "讀 資料處理與分析、資料隱私安全", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 1}, {"y": 2026, "m": 7, "d": 15, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "讀 機器學習基本原理與常見模型", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 2}, {"y": 2026, "m": 7, "d": 16, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "刷 114/115 科目一公告試題第一輪", "link": "https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7", "wd": 3}, {"y": 2026, "m": 7, "d": 17, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "整理科目一錯題本 v1", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 4}, {"y": 2026, "m": 7, "d": 18, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "複習本週錯題＋高頻名詞", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 5}, {"y": 2026, "m": 7, "d": 19, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "Week2 總複習，更新進度表", "link": "https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit", "wd": 6}, {"y": 2026, "m": 7, "d": 20, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "讀 No Code/Low Code 概念", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 0}, {"y": 2026, "m": 7, "d": 21, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "讀 生成式AI工具、Prompt工程", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 1}, {"y": 2026, "m": 7, "d": 22, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "讀 RAG/Fine-tuning、導入規劃、風險管理", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 2}, {"y": 2026, "m": 7, "d": 23, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "刷科目二公告試題第一輪", "link": "https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7", "wd": 3}, {"y": 2026, "m": 7, "d": 24, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "整理科目二錯題本 v1", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 4}, {"y": 2026, "m": 7, "d": 25, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "複習本週錯題", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 5}, {"y": 2026, "m": 7, "d": 26, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "Week3 總複習，更新進度表", "link": "https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit", "wd": 6}, {"y": 2026, "m": 7, "d": 27, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "高頻名詞記憶卡：科目一 1–15", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 0}, {"y": 2026, "m": 7, "d": 28, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "高頻名詞記憶卡：科目一 16–30", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 1}, {"y": 2026, "m": 7, "d": 29, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "高頻名詞記憶卡：科目二 1–15", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 2}, {"y": 2026, "m": 7, "d": 30, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "高頻名詞記憶卡：科目二 16–30", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 3}, {"y": 2026, "m": 7, "d": 31, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "複習全部記憶卡", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 4}, {"y": 2026, "m": 8, "d": 1, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "用記憶卡自我測驗", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 5}, {"y": 2026, "m": 8, "d": 2, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "Week4 總複習", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 6}, {"y": 2026, "m": 8, "d": 3, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "完整模擬考：科目一", "link": "https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7", "wd": 0}, {"y": 2026, "m": 8, "d": 4, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "模擬考檢討：科目一錯題分類", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 1}, {"y": 2026, "m": 8, "d": 5, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "完整模擬考：科目二", "link": "https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7", "wd": 2}, {"y": 2026, "m": 8, "d": 6, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "模擬考檢討：科目二錯題分類", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 3}, {"y": 2026, "m": 8, "d": 7, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "更新模擬考分數表", "link": "https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit", "wd": 4}, {"y": 2026, "m": 8, "d": 8, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "弱點題型加強複習", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 5}, {"y": 2026, "m": 8, "d": 9, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "Week5 總複習", "link": "https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f", "wd": 6}, {"y": 2026, "m": 8, "d": 10, "wid": "w6", "wtitle": "Week 6 考前壓縮", "text": "複習錯題本 Day1", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 0}, {"y": 2026, "m": 8, "d": 11, "wid": "w6", "wtitle": "Week 6 考前壓縮", "text": "複習高頻名詞 Day2", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 1}, {"y": 2026, "m": 8, "d": 12, "wid": "w6", "wtitle": "Week 6 考前壓縮", "text": "複習治理與風險題型 Day3", "link": "https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f", "wd": 2}, {"y": 2026, "m": 8, "d": 13, "wid": "w6", "wtitle": "Week 6 考前壓縮", "text": "列印考試通知＋全科總複習 Day4", "link": "https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f", "wd": 3}, {"y": 2026, "m": 8, "d": 14, "wid": "w6", "wtitle": "Week 6 考前壓縮", "text": "考前一頁總複習 Day5", "link": "https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f", "wd": 4}, {"y": 2026, "m": 8, "d": 15, "wid": "exam", "wtitle": "Exam Day 考試日", "text": "考試日：科目一 13:30／科目二 15:30", "link": "https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f", "wd": 5}];
+const WD_LABEL = ["日","一","二","三","四","五","六"];
 
-const phases = [
-  {id:'w1', range:'7/6 – 7/12', title:'Week 1　建檔＋上課吸收', start:[2026,7,6], end:[2026,7,12], tasks:[
-    {t:'確認 8/15 報名與繳費'},
-    {t:'建立 Google Drive 備考資料夾', link:DRIVE.root},
-    {t:'下載官方簡章、114/115 年官方公告試題', link:DRIVE.f00},
-    {t:'建立 Google Sheets 進度表', link:DRIVE.sheet},
-    {t:'參加 7/8–7/9 工研院培訓'},
-    {t:'整理課程重點筆記', link:DRIVE.courseDoc}
-  ]},
-  {id:'w2', range:'7/13 – 7/19', title:'Week 2　科目一打底', start:[2026,7,13], end:[2026,7,19], tasks:[
-    {t:'讀 AI 定義與分類、AI 治理概念', link:DRIVE.f00},
-    {t:'讀 資料處理與分析、資料隱私安全', link:DRIVE.f00},
-    {t:'讀 機器學習基本原理與常見模型', link:DRIVE.f00},
-    {t:'刷 114/115 科目一公告試題第一輪', link:DRIVE.f02},
-    {t:'整理科目一錯題本 v1', link:DRIVE.f04}
-  ]},
-  {id:'w3', range:'7/20 – 7/26', title:'Week 3　科目二打底', start:[2026,7,20], end:[2026,7,26], tasks:[
-    {t:'讀 No Code/Low Code 概念', link:DRIVE.f00},
-    {t:'讀 生成式AI工具、Prompt 工程', link:DRIVE.f00},
-    {t:'讀 RAG/Fine-tuning、導入規劃、風險管理', link:DRIVE.f00},
-    {t:'刷科目二公告試題第一輪', link:DRIVE.f02},
-    {t:'整理科目二錯題本 v1', link:DRIVE.f04}
-  ]},
-  {id:'w4', range:'7/27 – 8/2', title:'Week 4　高頻名詞收斂', start:[2026,7,27], end:[2026,8,2], tasks:[
-    {t:'用高頻考點 Top30 做記憶卡', link:DRIVE.f03},
-    {t:'每張卡寫定義／陷阱／例題／工作類比', link:DRIVE.f03},
-    {t:'完成約 60 張記憶卡', link:DRIVE.f03}
-  ]},
-  {id:'w5', range:'8/3 – 8/9', title:'Week 5　模擬考週', start:[2026,8,3], end:[2026,8,9], tasks:[
-    {t:'完整模擬考：科目一', link:DRIVE.f02},
-    {t:'完整模擬考：科目二', link:DRIVE.f02},
-    {t:'錯題依四類分類整理', link:DRIVE.f04},
-    {t:'更新模擬考分數表', link:DRIVE.sheet}
-  ]},
-  {id:'w6', range:'8/10 – 8/14', title:'Week 6　考前壓縮', start:[2026,8,10], end:[2026,8,14], tasks:[
-    {t:'每天複習錯題本', link:DRIVE.f04},
-    {t:'每天複習高頻名詞', link:DRIVE.f03},
-    {t:'複習治理與風險題型', link:DRIVE.f06},
-    {t:'列印考試通知（考前10天起）'},
-    {t:'完成考前一頁總複習', link:DRIVE.f06}
-  ]},
-  {id:'exam', range:'8/15', title:'Exam Day　考試日', start:[2026,8,15], end:[2026,8,15], tasks:[
-    {t:'攜帶身分證明文件正本'},
-    {t:'提早20分鐘到場'},
-    {t:'先拿穩基本題'},
-    {t:'情境題找關鍵字：資料、風險、部署、KPI、人類監督'}
-  ]}
-];
-
-function toDate(a){return new Date(a[0], a[1]-1, a[2]);}
+function dkey(y,m,d){return y+"-"+String(m).padStart(2,"0")+"-"+String(d).padStart(2,"0");}
+function toDate(y,m,d){return new Date(y,m-1,d);}
 function todayMidnight(){const d=new Date();d.setHours(0,0,0,0);return d;}
 
+const planByDate = {};
+DAILY_PLAN.forEach(p=>{ planByDate[dkey(p.y,p.m,p.d)] = p; });
+
 let state = {};
+let selectedKey = null;
 
-function taskId(phaseId, idx){return phaseId+'-'+idx;}
-
-function render(){
+function load(){
+  try{
+    const raw = localStorage.getItem('ipas-tracker-state-v2');
+    if(raw) state = JSON.parse(raw);
+  }catch(e){ state = {}; }
   const today = todayMidnight();
-  const examDate = toDate([2026,8,15]);
-  const daysLeft = Math.round((examDate - today)/86400000);
-  document.getElementById('countdown').textContent = daysLeft >= 0 ? daysLeft : 0;
+  selectedKey = dkey(today.getFullYear(), today.getMonth()+1, today.getDate());
+  render();
+}
+function save(){
+  try{ localStorage.setItem('ipas-tracker-state-v2', JSON.stringify(state)); }catch(e){}
+}
 
-  let total=0, done=0;
-  phases.forEach(p=>{ p.tasks.forEach((_,i)=>{ total++; if(state[taskId(p.id,i)]) done++; }); });
-  const pct = total ? Math.round(done/total*100) : 0;
-  document.getElementById('progress-pct').textContent = pct+'%';
-  document.getElementById('progress-bar').style.width = pct+'%';
-
-  let current = phases.find(p => today >= toDate(p.start) && today <= toDate(p.end));
-  if(!current){
-    current = today < toDate(phases[0].start) ? phases[0] : phases[phases.length-1];
-  }
-
-  document.getElementById('today-title').textContent = current.title;
-  document.getElementById('today-range').textContent = current.range;
-  const todayTasksEl = document.getElementById('today-tasks');
-  todayTasksEl.innerHTML='';
-  current.tasks.forEach((task,i)=>{
-    todayTasksEl.appendChild(makeTaskRow(current.id, i, task));
+function buildMonthGrid(year, month, title){
+  const first = new Date(year, month-1, 1);
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const leading = first.getDay();
+  const block = document.createElement('div');
+  block.className='month-block';
+  const h = document.createElement('div');
+  h.className='month-title';
+  h.textContent = title;
+  block.appendChild(h);
+  const grid = document.createElement('div');
+  grid.className='cal-grid';
+  WD_LABEL.forEach(w=>{
+    const el = document.createElement('div');
+    el.className='cal-wd'; el.textContent=w;
+    grid.appendChild(el);
   });
+  for(let i=0;i<leading;i++){
+    const el = document.createElement('div');
+    el.className='cal-day empty';
+    grid.appendChild(el);
+  }
+  const today = todayMidnight();
+  for(let d=1; d<=daysInMonth; d++){
+    const key = dkey(year,month,d);
+    const plan = planByDate[key];
+    const cell = document.createElement('div');
+    cell.className='cal-day';
+    const num = document.createElement('div');
+    num.className='dnum';
+    num.textContent = d;
+    cell.appendChild(num);
+    if(plan){
+      cell.classList.add('has-task');
+      const dot = document.createElement('div');
+      dot.className='dot';
+      cell.appendChild(dot);
+      if(state[key]) cell.classList.add('done'); else cell.classList.add('pending');
+      cell.addEventListener('click', ()=>{ selectedKey = key; render(); });
+    } else {
+      cell.classList.add('no-task');
+    }
+    const cellDate = toDate(year,month,d);
+    if(cellDate.getTime() === today.getTime()) cell.classList.add('is-today');
+    if(key === selectedKey) cell.classList.add('is-selected');
+    grid.appendChild(cell);
+  }
+  block.appendChild(grid);
+  return block;
+}
 
-  const weeksEl = document.getElementById('weeks');
-  weeksEl.innerHTML='';
-  phases.forEach(p=>{
-    const pDone = p.tasks.filter((_,i)=>state[taskId(p.id,i)]).length;
-    const det = document.createElement('details');
-    if(p.id===current.id) det.open = true;
-    const summary = document.createElement('summary');
-    summary.innerHTML = '<span>'+p.title+'</span><span class="week-meta">'+p.range+' &nbsp; <span class="badge'+(p.id===current.id?' current':'')+'">'+pDone+'/'+p.tasks.length+'</span> <span class="arrow">›</span></span>';
-    det.appendChild(summary);
-    const body = document.createElement('div');
-    body.className='week-body';
-    p.tasks.forEach((task,i)=>{ body.appendChild(makeTaskRow(p.id, i, task)); });
-    det.appendChild(body);
-    weeksEl.appendChild(det);
+let currentCalMonth = 7;
+
+function renderCalendars(){
+  const container = document.getElementById('calendars');
+  container.innerHTML='';
+  if(currentCalMonth === 7){
+    container.appendChild(buildMonthGrid(2026,7,'2026年 7月'));
+  } else {
+    container.appendChild(buildMonthGrid(2026,8,'2026年 8月'));
+  }
+}
+
+function setupTabs(rowId, onSelect){
+  const row = document.getElementById(rowId);
+  row.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      row.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      onSelect(btn.dataset.tab);
+    });
   });
 }
 
-function makeTaskRow(phaseId, idx, task){
-  const id = taskId(phaseId, idx);
+setupTabs('cal-tabs', (tab)=>{
+  currentCalMonth = (tab === 'cal-7') ? 7 : 8;
+  renderCalendars();
+});
+
+setupTabs('res-tabs', (tab)=>{
+  document.querySelectorAll('#res-folders, #res-files').forEach(p=>p.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+});
+
+function renderDayPanel(){
+  const panel = document.getElementById('day-panel');
+  panel.innerHTML='';
+  const plan = planByDate[selectedKey];
+  if(!plan) return;
+  const today = todayMidnight();
+  const [yy,mm,dd] = selectedKey.split('-').map(Number);
+  const isToday = toDate(yy,mm,dd).getTime() === today.getTime();
+
+  const card = document.createElement('div');
+  card.className='day-card';
+  const tab = document.createElement('div');
+  tab.className='day-tab';
+  tab.textContent = isToday ? '今天' : (mm+'/'+dd+'（'+WD_LABEL[toDate(yy,mm,dd).getDay()]+'）');
+  card.appendChild(tab);
+  const title = document.createElement('div');
+  title.className='day-title';
+  title.textContent = mm+'月'+dd+'日';
+  card.appendChild(title);
+  const week = document.createElement('div');
+  week.className='day-week';
+  week.textContent = plan.wtitle;
+  card.appendChild(week);
+  card.appendChild(makeTaskRow(selectedKey, plan));
+  panel.appendChild(card);
+}
+
+function makeTaskRow(key, plan){
   const row = document.createElement('div');
-  row.className = 'task'+(state[id]?' done':'');
+  row.className = 'task'+(state[key]?' done':'');
   const cb = document.createElement('input');
   cb.type='checkbox';
-  cb.checked = !!state[id];
-  cb.id='cb-'+id;
+  cb.checked = !!state[key];
+  cb.id='cb-'+key;
   cb.addEventListener('change', ()=>{
-    state[id] = cb.checked;
+    state[key] = cb.checked;
     save();
     render();
   });
   const main = document.createElement('div');
   main.className='task-main';
   const label = document.createElement('label');
-  label.htmlFor = 'cb-'+id;
-  label.textContent = task.t;
+  label.htmlFor='cb-'+key;
+  label.textContent = plan.text;
   main.appendChild(label);
-  if(task.link){
+  if(plan.link){
     const a = document.createElement('a');
-    a.href = task.link;
-    a.target='_blank';
-    a.rel='noopener';
-    a.className='res-link';
+    a.href=plan.link; a.target='_blank'; a.rel='noopener'; a.className='res-link';
     a.textContent='開啟資料 ›';
     main.appendChild(a);
   }
@@ -330,18 +319,55 @@ function makeTaskRow(phaseId, idx, task){
   return row;
 }
 
-function load(){
-  try{
-    const raw = localStorage.getItem('ipas-tracker-state');
-    if(raw) state = JSON.parse(raw);
-  }catch(e){ state = {}; }
-  render();
+function renderWeeks(){
+  const weeksEl = document.getElementById('weeks');
+  weeksEl.innerHTML='';
+  const weekOrder = ['w1','w2','w3','w4','w5','w6','exam'];
+  const today = todayMidnight();
+  const todayKey = selectedKey;
+  weekOrder.forEach(wid=>{
+    const days = DAILY_PLAN.filter(p=>p.wid===wid);
+    if(!days.length) return;
+    const wtitle = days[0].wtitle;
+    const doneCount = days.filter(p=>state[dkey(p.y,p.m,p.d)]).length;
+    const containsSelected = days.some(p=>dkey(p.y,p.m,p.d)===todayKey);
+    const det = document.createElement('details');
+    if(containsSelected) det.open = true;
+    const summary = document.createElement('summary');
+    const rangeLabel = days[0].m+'/'+days[0].d+' – '+days[days.length-1].m+'/'+days[days.length-1].d;
+    summary.innerHTML = '<span>'+wtitle+'</span><span class="week-meta">'+rangeLabel+' &nbsp; <span class="badge'+(containsSelected?' current':'')+'">'+doneCount+'/'+days.length+'</span> <span class="arrow">›</span></span>';
+    det.appendChild(summary);
+    const body = document.createElement('div');
+    body.className='week-body';
+    days.forEach(p=>{
+      const key = dkey(p.y,p.m,p.d);
+      const row = makeTaskRow(key, p);
+      const dlabel = document.createElement('span');
+      dlabel.style.cssText='font-size:11px;color:var(--ink-soft);min-width:34px;';
+      dlabel.textContent = p.m+'/'+p.d;
+      row.insertBefore(dlabel, row.firstChild);
+      body.appendChild(row);
+    });
+    det.appendChild(body);
+    weeksEl.appendChild(det);
+  });
 }
 
-function save(){
-  try{
-    localStorage.setItem('ipas-tracker-state', JSON.stringify(state));
-  }catch(e){ console.error('storage save failed', e); }
+function render(){
+  const today = todayMidnight();
+  const examDate = toDate(2026,8,15);
+  const daysLeft = Math.round((examDate - today)/86400000);
+  document.getElementById('countdown').textContent = daysLeft >= 0 ? daysLeft : 0;
+
+  const total = DAILY_PLAN.length;
+  const done = DAILY_PLAN.filter(p=>state[dkey(p.y,p.m,p.d)]).length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('progress-pct').textContent = pct+'%';
+  document.getElementById('progress-bar').style.width = pct+'%';
+
+  renderCalendars();
+  renderDayPanel();
+  renderWeeks();
 }
 
 load();
