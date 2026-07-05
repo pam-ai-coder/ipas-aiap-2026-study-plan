@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>iPAS 備考進度追蹤</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2EEE2;
+    --paper:#FBF9F1;
+    --ink:#232F3B;
+    --ink-soft:#5B6572;
+    --line:#DCD5C2;
+    --jade:#3F6B58;
+    --jade-light:#E3ECE6;
+    --amber:#B5791F;
+    --amber-light:#F5E9D6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans TC',sans-serif;
+    padding:28px 16px 60px;
+  }
+  .wrap{max-width:720px;margin:0 auto;}
+  h1{
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    font-size:26px;
+    margin:0 0 4px;
+  }
+  .sub{color:var(--ink-soft);font-size:14px;margin:0 0 24px;}
+  .top-row{display:flex;gap:14px;margin-bottom:22px;flex-wrap:wrap;}
+  .stat-card{
+    flex:1;min-width:140px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 18px;
+  }
+  .stat-num{font-family:'Noto Serif TC',serif;font-weight:700;font-size:30px;line-height:1;}
+  .stat-label{font-size:12px;color:var(--ink-soft);margin-top:6px;}
+  .progress-bar-outer{
+    height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:10px;
+  }
+  .progress-bar-inner{height:100%;background:var(--jade);border-radius:4px;transition:width .3s;}
+  .today-card{
+    position:relative;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-left:5px solid var(--amber);
+    border-radius:10px;
+    padding:18px 20px 14px;
+    margin-bottom:26px;
+  }
+  .today-tab{
+    position:absolute;top:-10px;left:18px;
+    background:var(--amber);color:#fff;
+    font-size:12px;font-weight:500;
+    padding:3px 12px;border-radius:0 0 6px 6px;
+  }
+  .today-title{
+    font-family:'Noto Serif TC',serif;font-weight:700;font-size:18px;margin:10px 0 2px;
+  }
+  .today-range{color:var(--ink-soft);font-size:13px;margin-bottom:12px;}
+  .task{
+    display:flex;align-items:flex-start;gap:10px;
+    padding:7px 0;border-bottom:1px dashed var(--line);
+    font-size:14px;
+  }
+  .task:last-child{border-bottom:none;}
+  .task input{margin-top:3px;width:16px;height:16px;accent-color:var(--jade);cursor:pointer;flex-shrink:0;}
+  .task label{cursor:pointer;line-height:1.5;}
+  .task.done label{color:var(--ink-soft);text-decoration:line-through;}
+  details{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:10px;
+    padding:0;
+  }
+  summary{
+    list-style:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 18px;font-family:'Noto Serif TC',serif;font-weight:500;font-size:15px;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary .arrow{transition:transform .2s;color:var(--ink-soft);font-size:13px;}
+  details[open] summary .arrow{transform:rotate(90deg);}
+  .week-meta{font-size:12px;color:var(--ink-soft);font-weight:400;font-family:'Noto Sans TC',sans-serif;}
+  .week-body{padding:0 18px 16px;}
+  .badge{
+    font-size:11px;padding:2px 9px;border-radius:20px;
+    background:var(--jade-light);color:var(--jade);font-weight:500;
+  }
+  .badge.current{background:var(--amber-light);color:var(--amber);}
+  footer{text-align:center;color:var(--ink-soft);font-size:12px;margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>iPAS AI應用規劃師 備考追蹤</h1>
+  <p class="sub">初級 · 科目一 人工智慧基礎概論 ／ 科目二 生成式AI應用與規劃</p>
+
+  <div class="top-row">
+    <div class="stat-card">
+      <div class="stat-num" id="countdown">—</div>
+      <div class="stat-label">距離 8/15 考試還有幾天</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="progress-pct">0%</div>
+      <div class="stat-label">整體任務完成度</div>
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="today-card">
+    <div class="today-tab">今天</div>
+    <div class="today-title" id="today-title">載入中…</div>
+    <div class="today-range" id="today-range"></div>
+    <div id="today-tasks"></div>
+  </div>
+
+  <div id="weeks"></div>
+
+  <footer>勾選會自動儲存，下次打開這個頁面時進度還在。</footer>
+</div>
+
+<script>
+const phases = [
+  {id:'w1', range:'7/6 – 7/12', title:'Week 1　建檔＋上課吸收', start:[2026,7,6], end:[2026,7,12], tasks:[
+    '確認 8/15 報名與繳費',
+    '建立 Google Drive 備考資料夾',
+    '下載官方簡章、114/115 年官方公告試題',
+    '建立 Google Sheets 進度表',
+    '參加 7/8–7/9 工研院培訓',
+    '整理課程重點筆記'
+  ]},
+  {id:'w2', range:'7/13 – 7/19', title:'Week 2　科目一打底', start:[2026,7,13], end:[2026,7,19], tasks:[
+    '讀 AI 定義與分類、AI 治理概念',
+    '讀 資料處理與分析、資料隱私安全',
+    '讀 機器學習基本原理與常見模型',
+    '刷 114/115 科目一公告試題第一輪',
+    '整理科目一錯題本 v1'
+  ]},
+  {id:'w3', range:'7/20 – 7/26', title:'Week 3　科目二打底', start:[2026,7,20], end:[2026,7,26], tasks:[
+    '讀 No Code/Low Code 概念',
+    '讀 生成式AI工具、Prompt 工程',
+    '讀 RAG/Fine-tuning、導入規劃、風險管理',
+    '刷科目二公告試題第一輪',
+    '整理科目二錯題本 v1'
+  ]},
+  {id:'w4', range:'7/27 – 8/2', title:'Week 4　高頻名詞收斂', start:[2026,7,27], end:[2026,8,2], tasks:[
+    '用高頻考點 Top30 做記憶卡',
+    '每張卡寫定義／陷阱／例題／工作類比',
+    '完成約 60 張記憶卡'
+  ]},
+  {id:'w5', range:'8/3 – 8/9', title:'Week 5　模擬考週', start:[2026,8,3], end:[2026,8,9], tasks:[
+    '完整模擬考：科目一',
+    '完整模擬考：科目二',
+    '錯題依四類分類整理',
+    '更新模擬考分數表'
+  ]},
+  {id:'w6', range:'8/10 – 8/14', title:'Week 6　考前壓縮', start:[2026,8,10], end:[2026,8,14], tasks:[
+    '每天複習錯題本',
+    '每天複習高頻名詞',
+    '複習治理與風險題型',
+    '列印考試通知（考前10天起）',
+    '完成考前一頁總複習'
+  ]},
+  {id:'exam', range:'8/15', title:'Exam Day　考試日', start:[2026,8,15], end:[2026,8,15], tasks:[
+    '攜帶身分證明文件正本',
+    '提早20分鐘到場',
+    '先拿穩基本題',
+    '情境題找關鍵字：資料、風險、部署、KPI、人類監督'
+  ]}
+];
+
+function toDate(a){return new Date(a[0], a[1]-1, a[2]);}
+function todayMidnight(){const d=new Date();d.setHours(0,0,0,0);return d;}
+
+let state = {};
+
+function taskId(phaseId, idx){return phaseId+'-'+idx;}
+
+function render(){
+  const today = todayMidnight();
+  const examDate = toDate([2026,8,15]);
+  const daysLeft = Math.round((examDate - today)/86400000);
+  document.getElementById('countdown').textContent = daysLeft >= 0 ? daysLeft : 0;
+
+  let total=0, done=0;
+  phases.forEach(p=>{ p.tasks.forEach((_,i)=>{ total++; if(state[taskId(p.id,i)]) done++; }); });
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('progress-pct').textContent = pct+'%';
+  document.getElementById('progress-bar').style.width = pct+'%';
+
+  let current = phases.find(p => today >= toDate(p.start) && today <= toDate(p.end));
+  if(!current){
+    current = today < toDate(phases[0].start) ? phases[0] : phases[phases.length-1];
+  }
+
+  document.getElementById('today-title').textContent = current.title;
+  document.getElementById('today-range').textContent = current.range;
+  const todayTasksEl = document.getElementById('today-tasks');
+  todayTasksEl.innerHTML='';
+  current.tasks.forEach((t,i)=>{
+    todayTasksEl.appendChild(makeTaskRow(current.id, i, t));
+  });
+
+  const weeksEl = document.getElementById('weeks');
+  weeksEl.innerHTML='';
+  phases.forEach(p=>{
+    const pDone = p.tasks.filter((_,i)=>state[taskId(p.id,i)]).length;
+    const det = document.createElement('details');
+    if(p.id===current.id) det.open = true;
+    const summary = document.createElement('summary');
+    summary.innerHTML = '<span>'+p.title+'</span><span class="week-meta">'+p.range+' &nbsp; <span class="badge'+(p.id===current.id?' current':'')+'">'+pDone+'/'+p.tasks.length+'</span> <span class="arrow">›</span></span>';
+    det.appendChild(summary);
+    const body = document.createElement('div');
+    body.className='week-body';
+    p.tasks.forEach((t,i)=>{ body.appendChild(makeTaskRow(p.id, i, t)); });
+    det.appendChild(body);
+    weeksEl.appendChild(det);
+  });
+}
+
+function makeTaskRow(phaseId, idx, text){
+  const id = taskId(phaseId, idx);
+  const row = document.createElement('div');
+  row.className = 'task'+(state[id]?' done':'');
+  const cb = document.createElement('input');
+  cb.type='checkbox';
+  cb.checked = !!state[id];
+  cb.id='cb-'+id;
+  cb.addEventListener('change', ()=>{
+    state[id] = cb.checked;
+    save();
+    render();
+  });
+  const label = document.createElement('label');
+  label.htmlFor = 'cb-'+id;
+  label.textContent = text;
+  row.appendChild(cb);
+  row.appendChild(label);
+  return row;
+}
+
+function load(){
+  try{
+    const raw = localStorage.getItem('ipas-tracker-state');
+    if(raw) state = JSON.parse(raw);
+  }catch(e){ state = {}; }
+  render();
+}
+
+function save(){
+  try{
+    localStorage.setItem('ipas-tracker-state', JSON.stringify(state));
+  }catch(e){ console.error('storage save failed', e); }
+}
+
+load();
+</script>
+</body>
+</html>
