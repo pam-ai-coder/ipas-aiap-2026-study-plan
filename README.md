@@ -31,4 +31,4 @@
 5. `calendar/ipas-study-calendar.ics` 只需匯入一次，之後 Google Calendar 會自動提醒。
 
 ## 目前狀態
-本次由 Claude 接續產出所有檔案內容；GitHub repo 本身需要 Pam 手動把這些檔案上傳（或用 git 指令 push），因為 Claude 目前沒有連接到 GitHub 的權限可以直接寫入這個 repo。
+本次由 Claude 接續產出所有檔案內容；GitHub Pages、Google Drive、Sheets 已完成初版部署。接下來以每週執行、刷題、錯題整理與考前複習為主。
