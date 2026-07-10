@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>iPAS 備考月曆與資源中心</title>
+<title>iPAS 備考中心</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -20,44 +20,58 @@
     --amber-light:#F5E9D6;
   }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans TC',sans-serif;padding:24px 14px 60px;}
-  .wrap{max-width:720px;margin:0 auto;}
-  h1{font-family:'Noto Serif TC',serif;font-weight:700;font-size:24px;margin:0 0 4px;}
-  .sub{color:var(--ink-soft);font-size:13px;margin:0 0 20px;}
-  .section-label{font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;margin:26px 0 10px;}
-  .top-row{display:flex;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
-  .stat-card{flex:1;min-width:130px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
-  .stat-num{font-family:'Noto Serif TC',serif;font-weight:700;font-size:28px;line-height:1;}
-  .stat-label{font-size:12px;color:var(--ink-soft);margin-top:6px;}
-  .progress-bar-outer{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:10px;}
+  html,body{height:100%;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans TC',sans-serif;}
+  .app{max-width:720px;margin:0 auto;display:flex;flex-direction:column;min-height:100vh;}
+  .header{padding:20px 16px 12px;}
+  h1{font-family:'Noto Serif TC',serif;font-weight:700;font-size:22px;margin:0 0 3px;}
+  .sub{color:var(--ink-soft);font-size:12px;margin:0 0 14px;}
+  .top-row{display:flex;gap:10px;}
+  .stat-card{flex:1;min-width:120px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+  .stat-num{font-family:'Noto Serif TC',serif;font-weight:700;font-size:24px;line-height:1;}
+  .stat-label{font-size:11px;color:var(--ink-soft);margin-top:5px;}
+  .progress-bar-outer{height:7px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:8px;}
   .progress-bar-inner{height:100%;background:var(--jade);border-radius:4px;transition:width .3s;}
 
-  .tab-row{display:flex;gap:6px;margin-bottom:10px;}
-  .tab-btn{
-    flex:1;background:var(--paper);border:1px solid var(--line);border-radius:8px;
-    padding:9px 12px;font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:500;
-    color:var(--ink-soft);cursor:pointer;
+  .content{flex:1;padding:4px 16px 90px;}
+  .view{display:none;}
+  .view.active{display:block;}
+  .view-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:16px;margin:8px 0 12px;}
+
+  .bottom-nav{
+    position:fixed;bottom:0;left:0;right:0;
+    background:var(--paper);border-top:1px solid var(--line);
+    display:flex;max-width:720px;margin:0 auto;
+    padding-bottom:env(safe-area-inset-bottom, 0);
   }
+  .nav-btn{
+    flex:1;background:none;border:none;padding:10px 4px 8px;
+    font-family:'Noto Sans TC',sans-serif;font-size:11px;color:var(--ink-soft);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+  }
+  .nav-btn .nav-dot{width:5px;height:5px;border-radius:50%;background:transparent;}
+  .nav-btn.active{color:var(--jade);font-weight:700;}
+  .nav-btn.active .nav-dot{background:var(--jade);}
+
+  .tab-row{display:flex;gap:6px;margin-bottom:10px;}
+  .tab-btn{flex:1;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:500;color:var(--ink-soft);cursor:pointer;}
   .tab-btn.active{background:var(--jade);color:#fff;border-color:var(--jade);}
   .tab-panel{display:none;}
   .tab-panel.active{display:block;}
+
   .res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
   .res-card{display:block;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-decoration:none;color:var(--ink);}
   .res-card .res-num{font-family:'Noto Serif TC',serif;font-weight:700;color:var(--jade);font-size:13px;}
   .res-card .res-name{font-size:13px;font-weight:500;margin-top:3px;line-height:1.3;}
-  .res-files{margin-top:10px;display:flex;flex-direction:column;gap:8px;}
+  .res-files{margin-top:0;display:flex;flex-direction:column;gap:8px;}
   .res-file-link{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 14px;text-decoration:none;color:var(--ink);font-size:13px;}
   .res-file-link span.arrow{color:var(--ink-soft);}
 
   .month-block{margin-bottom:18px;}
-  .month-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:15px;margin:0 0 8px;}
+  .month-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;margin:0 0 8px;}
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
   .cal-wd{text-align:center;font-size:11px;color:var(--ink-soft);padding:2px 0;}
-  .cal-day{
-    aspect-ratio:1;border-radius:8px;background:var(--paper);border:1px solid var(--line);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    font-size:12px;cursor:default;position:relative;
-  }
+  .cal-day{aspect-ratio:1;border-radius:8px;background:var(--paper);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;cursor:default;position:relative;}
   .cal-day.empty{background:transparent;border:none;}
   .cal-day.has-task{cursor:pointer;}
   .cal-day.has-task:active{background:var(--jade-light);}
@@ -69,7 +83,7 @@
   .cal-day.pending .dot{background:var(--amber);}
   .cal-day.no-task .dnum{color:var(--ink-soft);opacity:.4;}
 
-  .day-card{position:relative;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--amber);border-radius:10px;padding:18px 20px 16px;margin-bottom:26px;}
+  .day-card{position:relative;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--amber);border-radius:10px;padding:18px 20px 16px;}
   .day-tab{position:absolute;top:-10px;left:18px;background:var(--amber);color:#fff;font-size:12px;font-weight:500;padding:3px 12px;border-radius:0 0 6px 6px;}
   .day-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:17px;margin:10px 0 2px;}
   .day-week{color:var(--ink-soft);font-size:13px;margin-bottom:12px;}
@@ -91,71 +105,157 @@
   .week-body .task:last-child{border-bottom:none;}
   .badge{font-size:11px;padding:2px 9px;border-radius:20px;background:var(--jade-light);color:var(--jade);font-weight:500;}
   .badge.current{background:var(--amber-light);color:var(--amber);}
-  footer{text-align:center;color:var(--ink-soft);font-size:12px;margin-top:30px;}
-  @media (max-width:420px){h1{font-size:21px;} .stat-num{font-size:24px;} .cal-day{font-size:11px;}}
+
+  .quiz-stats{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .quiz-stat-pill{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-size:11px;color:var(--ink-soft);}
+  .quiz-stat-pill b{color:var(--ink);font-family:'Noto Serif TC',serif;}
+  .quiz-box{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:12px;}
+  .quiz-meta{font-size:12px;color:var(--ink-soft);margin-bottom:8px;}
+  .quiz-stem{font-size:14px;line-height:1.7;margin-bottom:14px;white-space:pre-wrap;}
+  .quiz-opt{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:13px;line-height:1.6;cursor:pointer;font-family:'Noto Sans TC',sans-serif;color:var(--ink);}
+  .quiz-opt:disabled{cursor:default;}
+  .quiz-opt.correct{background:var(--jade-light);border-color:var(--jade);color:var(--jade);font-weight:500;}
+  .quiz-opt.wrong{background:#F7E3DE;border-color:#B5541F;color:#B5541F;font-weight:500;}
+  .quiz-feedback{font-size:13px;font-weight:500;margin-top:6px;}
+  .quiz-feedback.ok{color:var(--jade);}
+  .quiz-feedback.no{color:#B5541F;}
+  .quiz-next-btn{background:var(--jade);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+
+  @media (max-width:420px){h1{font-size:20px;} .stat-num{font-size:21px;} .cal-day{font-size:11px;}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>iPAS AI應用規劃師 備考月曆</h1>
-  <p class="sub">初級 · 科目一 人工智慧基礎概論 ／ 科目二 生成式AI應用與規劃</p>
-
-  <div class="top-row">
-    <div class="stat-card">
-      <div class="stat-num" id="countdown">—</div>
-      <div class="stat-label">距離 8/15 考試還有幾天</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="progress-pct">0%</div>
-      <div class="stat-label">整體任務完成度</div>
-      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar" style="width:0%"></div></div>
-    </div>
-  </div>
-
-  <div class="section-label">資源中心 · Google Drive</div>
-  <div class="tab-row" id="res-tabs">
-    <button class="tab-btn active" data-tab="res-folders">資料夾</button>
-    <button class="tab-btn" data-tab="res-files">常用檔案</button>
-  </div>
-  <div class="tab-panel active" id="res-folders">
-    <div class="res-grid">
-      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9"><div class="res-num">00</div><div class="res-name">官方資料</div></a>
-      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1sWbIIm3Eypu_TbITBcwb2oLtfKZcgsFW"><div class="res-num">01</div><div class="res-name">課程講義 0708–0709</div></a>
-      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7"><div class="res-num">02</div><div class="res-name">考古題</div></a>
-      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE"><div class="res-num">03</div><div class="res-name">高頻名詞 Top30</div></a>
-      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY"><div class="res-num">04</div><div class="res-name">錯題本</div></a>
-      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1aT_fGpSpVNB4wVWeW5U8hOQp0TwsrC3K"><div class="res-num">05</div><div class="res-name">情境題判斷卡</div></a>
-      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f"><div class="res-num">06</div><div class="res-name">考前總複習</div></a>
-      <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1DhrxrXVtx5f2cbQURtsdfnyv_-mGczaG"><div class="res-num">📁</div><div class="res-name">主資料夾（全部）</div></a>
-    </div>
-  </div>
-  <div class="tab-panel" id="res-files">
-    <div class="res-files">
-      <a class="res-file-link" target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit"><span>進度追蹤／錯題本／記憶卡（Sheets）</span><span class="arrow">›</span></a>
-      <a class="res-file-link" target="_blank" rel="noopener" href="https://docs.google.com/document/d/1fO8I4lK-yOE70kwnmn1HmcU88T1df6kozLXUmuzXJac/edit"><span>7/8–7/9 課程重點筆記（Docs）</span><span class="arrow">›</span></a>
-      <a class="res-file-link" target="_blank" rel="noopener" href="https://drive.google.com/file/d/1AD6o87PVJutmZfqR14XkIbMrKmaN04md/view"><span>官方簡章重點摘要</span><span class="arrow">›</span></a>
+<div class="app">
+  <div class="header">
+    <h1>iPAS AI應用規劃師 備考中心</h1>
+    <p class="sub">初級 · 科目一 人工智慧基礎概論 ／ 科目二 生成式AI應用與規劃</p>
+    <div class="top-row">
+      <div class="stat-card">
+        <div class="stat-num" id="countdown">—</div>
+        <div class="stat-label">距離 8/15 考試還有幾天</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="progress-pct">0%</div>
+        <div class="stat-label">整體任務完成度</div>
+        <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar" style="width:0%"></div></div>
+      </div>
     </div>
   </div>
 
-  <div class="section-label">備考月曆</div>
-  <div class="tab-row" id="cal-tabs">
-    <button class="tab-btn active" data-tab="cal-7">7月</button>
-    <button class="tab-btn" data-tab="cal-8">8月</button>
+  <div class="content">
+
+    <div class="view" id="view-today" data-view="view-today">
+      <div class="view-title">今天</div>
+      <div id="day-panel"></div>
+    </div>
+
+    <div class="view" id="view-calendar" data-view="view-calendar">
+      <div class="view-title">備考月曆</div>
+      <div class="tab-row" id="cal-tabs">
+        <button class="tab-btn active" data-tab="cal-7">7月</button>
+        <button class="tab-btn" data-tab="cal-8">8月</button>
+      </div>
+      <div id="calendars"></div>
+    </div>
+
+    <div class="view" id="view-quiz" data-view="view-quiz">
+      <div class="view-title">考古題互動測驗</div>
+      <div class="tab-row" id="quiz-tabs">
+        <button class="tab-btn active" data-tab="all">全部</button>
+        <button class="tab-btn" data-tab="科目一">科目一</button>
+        <button class="tab-btn" data-tab="科目二">科目二</button>
+      </div>
+      <div class="quiz-stats" id="quiz-stats"></div>
+      <div id="quiz-card"></div>
+      <div style="margin-bottom:10px;">
+        <button id="quiz-next-btn" class="quiz-next-btn">下一題 ›</button>
+      </div>
+    </div>
+
+    <div class="view" id="view-resources" data-view="view-resources">
+      <div class="view-title">資源中心 · Google Drive</div>
+      <div class="tab-row" id="res-tabs">
+        <button class="tab-btn active" data-tab="res-folders">資料夾</button>
+        <button class="tab-btn" data-tab="res-files">常用檔案</button>
+      </div>
+      <div class="tab-panel active" id="res-folders">
+        <div class="res-grid">
+          <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9"><div class="res-num">00</div><div class="res-name">官方資料</div></a>
+          <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1sWbIIm3Eypu_TbITBcwb2oLtfKZcgsFW"><div class="res-num">01</div><div class="res-name">課程講義 0708–0709</div></a>
+          <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7"><div class="res-num">02</div><div class="res-name">考古題</div></a>
+          <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE"><div class="res-num">03</div><div class="res-name">高頻名詞 Top30</div></a>
+          <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY"><div class="res-num">04</div><div class="res-name">錯題本</div></a>
+          <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1aT_fGpSpVNB4wVWeW5U8hOQp0TwsrC3K"><div class="res-num">05</div><div class="res-name">情境題判斷卡</div></a>
+          <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f"><div class="res-num">06</div><div class="res-name">考前總複習</div></a>
+          <a class="res-card" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1DhrxrXVtx5f2cbQURtsdfnyv_-mGczaG"><div class="res-num">📁</div><div class="res-name">主資料夾（全部）</div></a>
+        </div>
+      </div>
+      <div class="tab-panel" id="res-files">
+        <div class="res-files">
+          <a class="res-file-link" target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit"><span>進度追蹤／錯題本／記憶卡（Sheets）</span><span class="arrow">›</span></a>
+          <a class="res-file-link" target="_blank" rel="noopener" href="https://docs.google.com/document/d/1fO8I4lK-yOE70kwnmn1HmcU88T1df6kozLXUmuzXJac/edit"><span>7/8–7/9 課程重點筆記（Docs）</span><span class="arrow">›</span></a>
+          <a class="res-file-link" target="_blank" rel="noopener" href="https://drive.google.com/file/d/1AD6o87PVJutmZfqR14XkIbMrKmaN04md/view"><span>官方簡章重點摘要</span><span class="arrow">›</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="view" id="view-weeks" data-view="view-weeks">
+      <div class="view-title">六週讀書計畫（清單檢視）</div>
+      <div id="weeks"></div>
+    </div>
+
   </div>
-  <div id="calendars"></div>
 
-  <div id="day-panel"></div>
-
-  <div class="section-label">六週讀書計畫（清單檢視）</div>
-  <div id="weeks"></div>
-
-  <footer>打勾會自動存在這台裝置的瀏覽器裡；點月曆上的日期可以查看/勾選當天任務。</footer>
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-view="view-today"><span class="nav-dot"></span>今天</button>
+    <button class="nav-btn" data-view="view-calendar"><span class="nav-dot"></span>月曆</button>
+    <button class="nav-btn" data-view="view-quiz"><span class="nav-dot"></span>測驗</button>
+    <button class="nav-btn" data-view="view-resources"><span class="nav-dot"></span>資源</button>
+    <button class="nav-btn" data-view="view-weeks"><span class="nav-dot"></span>清單</button>
+  </nav>
 </div>
 
 <script>
+const DRIVE = {
+  root:'https://drive.google.com/drive/folders/1DhrxrXVtx5f2cbQURtsdfnyv_-mGczaG',
+  f00:'https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9',
+  f02:'https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7',
+  f03:'https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE',
+  f04:'https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY',
+  f06:'https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f',
+  sheet:'https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit',
+  courseDoc:'https://docs.google.com/document/d/1fO8I4lK-yOE70kwnmn1HmcU88T1df6kozLXUmuzXJac/edit'
+};
+
 const DAILY_PLAN = [{"y": 2026, "m": 7, "d": 6, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "確認 8/15 報名與繳費", "link": null, "wd": 0}, {"y": 2026, "m": 7, "d": 7, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "建立 Google Drive 備考資料夾", "link": "https://drive.google.com/drive/folders/1DhrxrXVtx5f2cbQURtsdfnyv_-mGczaG", "wd": 1}, {"y": 2026, "m": 7, "d": 8, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "工研院培訓 Day1＋下載官方簡章/考古題", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 2}, {"y": 2026, "m": 7, "d": 9, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "工研院培訓 Day2＋整理課程筆記", "link": "https://docs.google.com/document/d/1fO8I4lK-yOE70kwnmn1HmcU88T1df6kozLXUmuzXJac/edit", "wd": 3}, {"y": 2026, "m": 7, "d": 10, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "建立 Google Sheets 進度表", "link": "https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit", "wd": 4}, {"y": 2026, "m": 7, "d": 11, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "彙整課程重點筆記", "link": "https://docs.google.com/document/d/1fO8I4lK-yOE70kwnmn1HmcU88T1df6kozLXUmuzXJac/edit", "wd": 5}, {"y": 2026, "m": 7, "d": 12, "wid": "w1", "wtitle": "Week 1 建檔＋上課吸收", "text": "Week1 總複習與檢查資料夾", "link": "https://drive.google.com/drive/folders/1DhrxrXVtx5f2cbQURtsdfnyv_-mGczaG", "wd": 6}, {"y": 2026, "m": 7, "d": 13, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "讀 AI 定義與分類、AI 治理概念", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 0}, {"y": 2026, "m": 7, "d": 14, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "讀 資料處理與分析、資料隱私安全", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 1}, {"y": 2026, "m": 7, "d": 15, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "讀 機器學習基本原理與常見模型", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 2}, {"y": 2026, "m": 7, "d": 16, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "刷 114/115 科目一公告試題第一輪", "link": "https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7", "wd": 3}, {"y": 2026, "m": 7, "d": 17, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "整理科目一錯題本 v1", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 4}, {"y": 2026, "m": 7, "d": 18, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "複習本週錯題＋高頻名詞", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 5}, {"y": 2026, "m": 7, "d": 19, "wid": "w2", "wtitle": "Week 2 科目一打底", "text": "Week2 總複習，更新進度表", "link": "https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit", "wd": 6}, {"y": 2026, "m": 7, "d": 20, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "讀 No Code/Low Code 概念", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 0}, {"y": 2026, "m": 7, "d": 21, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "讀 生成式AI工具、Prompt工程", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 1}, {"y": 2026, "m": 7, "d": 22, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "讀 RAG/Fine-tuning、導入規劃、風險管理", "link": "https://drive.google.com/drive/folders/1nQLQli4ywwLRQZmx9x46cr8dc3M_92E9", "wd": 2}, {"y": 2026, "m": 7, "d": 23, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "刷科目二公告試題第一輪", "link": "https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7", "wd": 3}, {"y": 2026, "m": 7, "d": 24, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "整理科目二錯題本 v1", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 4}, {"y": 2026, "m": 7, "d": 25, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "複習本週錯題", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 5}, {"y": 2026, "m": 7, "d": 26, "wid": "w3", "wtitle": "Week 3 科目二打底", "text": "Week3 總複習，更新進度表", "link": "https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit", "wd": 6}, {"y": 2026, "m": 7, "d": 27, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "高頻名詞記憶卡：科目一 1–15", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 0}, {"y": 2026, "m": 7, "d": 28, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "高頻名詞記憶卡：科目一 16–30", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 1}, {"y": 2026, "m": 7, "d": 29, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "高頻名詞記憶卡：科目二 1–15", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 2}, {"y": 2026, "m": 7, "d": 30, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "高頻名詞記憶卡：科目二 16–30", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 3}, {"y": 2026, "m": 7, "d": 31, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "複習全部記憶卡", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 4}, {"y": 2026, "m": 8, "d": 1, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "用記憶卡自我測驗", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 5}, {"y": 2026, "m": 8, "d": 2, "wid": "w4", "wtitle": "Week 4 高頻名詞收斂", "text": "Week4 總複習", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 6}, {"y": 2026, "m": 8, "d": 3, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "完整模擬考：科目一", "link": "https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7", "wd": 0}, {"y": 2026, "m": 8, "d": 4, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "模擬考檢討：科目一錯題分類", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 1}, {"y": 2026, "m": 8, "d": 5, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "完整模擬考：科目二", "link": "https://drive.google.com/drive/folders/1jFdCRDRkmew-DE3pyTpSLmHW4u7NN5W7", "wd": 2}, {"y": 2026, "m": 8, "d": 6, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "模擬考檢討：科目二錯題分類", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 3}, {"y": 2026, "m": 8, "d": 7, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "更新模擬考分數表", "link": "https://docs.google.com/spreadsheets/d/1un6Cfa8FC61y-07qHD7e_sqqnHj_5Zcl/edit", "wd": 4}, {"y": 2026, "m": 8, "d": 8, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "弱點題型加強複習", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 5}, {"y": 2026, "m": 8, "d": 9, "wid": "w5", "wtitle": "Week 5 模擬考週", "text": "Week5 總複習", "link": "https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f", "wd": 6}, {"y": 2026, "m": 8, "d": 10, "wid": "w6", "wtitle": "Week 6 考前壓縮", "text": "複習錯題本 Day1", "link": "https://drive.google.com/drive/folders/18cSxEQJohktDkewgphy7lJxhsf5BmTUY", "wd": 0}, {"y": 2026, "m": 8, "d": 11, "wid": "w6", "wtitle": "Week 6 考前壓縮", "text": "複習高頻名詞 Day2", "link": "https://drive.google.com/drive/folders/1siB29Nlsv2UFJI_rwn4fKFwrbBz8FRpE", "wd": 1}, {"y": 2026, "m": 8, "d": 12, "wid": "w6", "wtitle": "Week 6 考前壓縮", "text": "複習治理與風險題型 Day3", "link": "https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f", "wd": 2}, {"y": 2026, "m": 8, "d": 13, "wid": "w6", "wtitle": "Week 6 考前壓縮", "text": "列印考試通知＋全科總複習 Day4", "link": "https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f", "wd": 3}, {"y": 2026, "m": 8, "d": 14, "wid": "w6", "wtitle": "Week 6 考前壓縮", "text": "考前一頁總複習 Day5", "link": "https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f", "wd": 4}, {"y": 2026, "m": 8, "d": 15, "wid": "exam", "wtitle": "Exam Day 考試日", "text": "考試日：科目一 13:30／科目二 15:30", "link": "https://drive.google.com/drive/folders/1yOsw7dSEXICPIyvd2pfhWb4jaWD0bN-f", "wd": 5}];
 const WD_LABEL = ["日","一","二","三","四","五","六"];
 
+// ---------- persistent UI state (remembers which view/tab you left on) ----------
+let uiState = {activeView:'view-today', calMonth:7, quizSubject:'all', resTab:'res-folders'};
+function loadUiState(){
+  try{
+    const raw = localStorage.getItem('ipas-ui-state-v1');
+    if(raw) uiState = Object.assign(uiState, JSON.parse(raw));
+  }catch(e){}
+}
+function saveUiState(){
+  try{ localStorage.setItem('ipas-ui-state-v1', JSON.stringify(uiState)); }catch(e){}
+}
+
+function switchView(viewId){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const target = document.getElementById(viewId);
+  if(target) target.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active', b.dataset.view===viewId));
+  uiState.activeView = viewId;
+  saveUiState();
+}
+
+document.querySelectorAll('.nav-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>switchView(btn.dataset.view));
+});
+
+// ---------- day tracker ----------
 function dkey(y,m,d){return y+"-"+String(m).padStart(2,"0")+"-"+String(d).padStart(2,"0");}
 function toDate(y,m,d){return new Date(y,m-1,d);}
 function todayMidnight(){const d=new Date();d.setHours(0,0,0,0);return d;}
@@ -166,18 +266,17 @@ DAILY_PLAN.forEach(p=>{ planByDate[dkey(p.y,p.m,p.d)] = p; });
 let state = {};
 let selectedKey = null;
 
-function load(){
+function loadTrackerState(){
   try{
     const raw = localStorage.getItem('ipas-tracker-state-v2');
     if(raw) state = JSON.parse(raw);
   }catch(e){ state = {}; }
-  const today = todayMidnight();
-  selectedKey = dkey(today.getFullYear(), today.getMonth()+1, today.getDate());
-  render();
 }
-function save(){
+function saveTrackerState(){
   try{ localStorage.setItem('ipas-tracker-state-v2', JSON.stringify(state)); }catch(e){}
 }
+
+let currentCalMonth = 7;
 
 function buildMonthGrid(year, month, title){
   const first = new Date(year, month-1, 1);
@@ -217,7 +316,7 @@ function buildMonthGrid(year, month, title){
       dot.className='dot';
       cell.appendChild(dot);
       if(state[key]) cell.classList.add('done'); else cell.classList.add('pending');
-      cell.addEventListener('click', ()=>{ selectedKey = key; render(); });
+      cell.addEventListener('click', ()=>{ selectedKey = key; renderDayPanel(); renderWeeks(); switchView('view-today'); });
     } else {
       cell.classList.add('no-task');
     }
@@ -230,38 +329,40 @@ function buildMonthGrid(year, month, title){
   return block;
 }
 
-let currentCalMonth = 7;
-
 function renderCalendars(){
   const container = document.getElementById('calendars');
   container.innerHTML='';
-  if(currentCalMonth === 7){
-    container.appendChild(buildMonthGrid(2026,7,'2026年 7月'));
-  } else {
-    container.appendChild(buildMonthGrid(2026,8,'2026年 8月'));
-  }
+  container.appendChild(buildMonthGrid(2026, currentCalMonth, currentCalMonth===7?'2026年 7月':'2026年 8月'));
 }
 
-function setupTabs(rowId, onSelect){
-  const row = document.getElementById(rowId);
-  row.querySelectorAll('.tab-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      row.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      onSelect(btn.dataset.tab);
-    });
+function makeTaskRow(key, plan){
+  const row = document.createElement('div');
+  row.className = 'task'+(state[key]?' done':'');
+  const cb = document.createElement('input');
+  cb.type='checkbox';
+  cb.checked = !!state[key];
+  cb.id='cb-'+key;
+  cb.addEventListener('change', ()=>{
+    state[key] = cb.checked;
+    saveTrackerState();
+    renderAll();
   });
+  const main = document.createElement('div');
+  main.className='task-main';
+  const label = document.createElement('label');
+  label.htmlFor='cb-'+key;
+  label.textContent = plan.text;
+  main.appendChild(label);
+  if(plan.link){
+    const a = document.createElement('a');
+    a.href=plan.link; a.target='_blank'; a.rel='noopener'; a.className='res-link';
+    a.textContent='開啟資料 ›';
+    main.appendChild(a);
+  }
+  row.appendChild(cb);
+  row.appendChild(main);
+  return row;
 }
-
-setupTabs('cal-tabs', (tab)=>{
-  currentCalMonth = (tab === 'cal-7') ? 7 : 8;
-  renderCalendars();
-});
-
-setupTabs('res-tabs', (tab)=>{
-  document.querySelectorAll('#res-folders, #res-files').forEach(p=>p.classList.remove('active'));
-  document.getElementById(tab).classList.add('active');
-});
 
 function renderDayPanel(){
   const panel = document.getElementById('day-panel');
@@ -290,47 +391,16 @@ function renderDayPanel(){
   panel.appendChild(card);
 }
 
-function makeTaskRow(key, plan){
-  const row = document.createElement('div');
-  row.className = 'task'+(state[key]?' done':'');
-  const cb = document.createElement('input');
-  cb.type='checkbox';
-  cb.checked = !!state[key];
-  cb.id='cb-'+key;
-  cb.addEventListener('change', ()=>{
-    state[key] = cb.checked;
-    save();
-    render();
-  });
-  const main = document.createElement('div');
-  main.className='task-main';
-  const label = document.createElement('label');
-  label.htmlFor='cb-'+key;
-  label.textContent = plan.text;
-  main.appendChild(label);
-  if(plan.link){
-    const a = document.createElement('a');
-    a.href=plan.link; a.target='_blank'; a.rel='noopener'; a.className='res-link';
-    a.textContent='開啟資料 ›';
-    main.appendChild(a);
-  }
-  row.appendChild(cb);
-  row.appendChild(main);
-  return row;
-}
-
 function renderWeeks(){
   const weeksEl = document.getElementById('weeks');
   weeksEl.innerHTML='';
   const weekOrder = ['w1','w2','w3','w4','w5','w6','exam'];
-  const today = todayMidnight();
-  const todayKey = selectedKey;
   weekOrder.forEach(wid=>{
     const days = DAILY_PLAN.filter(p=>p.wid===wid);
     if(!days.length) return;
     const wtitle = days[0].wtitle;
     const doneCount = days.filter(p=>state[dkey(p.y,p.m,p.d)]).length;
-    const containsSelected = days.some(p=>dkey(p.y,p.m,p.d)===todayKey);
+    const containsSelected = days.some(p=>dkey(p.y,p.m,p.d)===selectedKey);
     const det = document.createElement('details');
     if(containsSelected) det.open = true;
     const summary = document.createElement('summary');
@@ -353,7 +423,7 @@ function renderWeeks(){
   });
 }
 
-function render(){
+function renderStats(){
   const today = todayMidnight();
   const examDate = toDate(2026,8,15);
   const daysLeft = Math.round((examDate - today)/86400000);
@@ -364,13 +434,222 @@ function render(){
   const pct = total ? Math.round(done/total*100) : 0;
   document.getElementById('progress-pct').textContent = pct+'%';
   document.getElementById('progress-bar').style.width = pct+'%';
+}
 
+function renderAll(){
+  renderStats();
   renderCalendars();
   renderDayPanel();
   renderWeeks();
+  renderQuizStats();
 }
 
-load();
+// calendar month tabs
+document.getElementById('cal-tabs').querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.getElementById('cal-tabs').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCalMonth = (btn.dataset.tab === 'cal-7') ? 7 : 8;
+    uiState.calMonth = currentCalMonth;
+    saveUiState();
+    renderCalendars();
+  });
+});
+
+// resource tabs
+document.getElementById('res-tabs').querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.getElementById('res-tabs').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#res-folders, #res-files').forEach(p=>p.classList.remove('active'));
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    uiState.resTab = btn.dataset.tab;
+    saveUiState();
+  });
+});
+
+// ---------- quiz ----------
+const QUESTIONS = [
+  {id:'s2-1-1', subject:'科目一', source:'115年第二次·科目一', num:1, stem:'某地方政府委託資料科學團隊，針對選舉期間的社群媒體貼文進行大規模輿情分析，目標是了解選民對各政策議題的態度傾向。團隊規劃整合多種 AI 技術以提升分析涵蓋率。下列哪一種技術組合最符合上述需求，且不涉及對特定個人的身份辨識？', options:{A:'情感分析結合關鍵詞提取，分析貼文內容的立場與高頻議題詞彙',B:'文本分類結合人臉辨識，辨識發文者身份後再進行政治立場分類',C:'語音辨識結合影像辨識，將選舉造勢影片轉換為可分析的文字資料，並進行內容整理與主題歸納',D:'推薦系統結合社群圖譜分析，針對個別使用者預測其投票選擇'}, answer:'A'},
+  {id:'s2-1-2', subject:'科目一', source:'115年第二次·科目一', num:2, stem:'某物流公司正在規劃導入 AI 系統以優化多項業務流程，包含異常包裹偵測、路線自動規劃與倉儲揀貨效率提升。請問下列對於各學習方式的敘述，何者有誤？', options:{A:'監督式學習適合用於異常包裹偵測，前提是須備有大量已標註為正常或異常的歷史資料',B:'非監督式學習可用於分析倉儲揀貨動線的潛在分群，但無法直接預測特定行為的對錯',C:'強化學習適合應用於路線規劃，模型透過反覆嘗試與環境回饋，逐步找出最佳配送策略',D:'非監督式學習可用於異常包裹偵測，並能在缺乏標註資料的情況下，準確判斷每筆資料是否屬於特定異常類別'}, answer:'D'},
+  {id:'s2-1-3', subject:'科目一', source:'115年第二次·科目一', num:3, stem:'某電子製造公司在產線上導入 AI 系統，自動判斷電路板是否存在焊接瑕疵，並取代人工目視檢查。下列何者最不符合此應用所展現的 AI 核心技術能力？', options:{A:'自然語言處理（Natural Language Processing）',B:'電腦視覺（Computer Vision）',C:'異常偵測（Anomaly Detection）',D:'診斷性分析（Diagnostic Analytics）'}, answer:'A'},
+  {id:'s2-1-4', subject:'科目一', source:'115年第二次·科目一', num:4, stem:'某金融科技公司的交易系統，在毫秒等級的時間內持續掃描跨市場價格差異、分析大量即時報價，並自動執行交易指令。下列何者最能正確說明其核心 AI 能力？', options:{A:'透過自然語言處理技術分析財經新聞語意，作為輔助性市場情緒指標',B:'快速分析龐大市場數據並在極短時間內識別交易機會，驅動自動化交易決策',C:'運用生成對抗網路模擬極端市場情境，預先產出各類黑天鵝事件的應對策略',D:'透過推薦系統技術，根據投資人歷史交易行為推薦最適合的投資組合標的'}, answer:'B'},
+  {id:'s2-1-5', subject:'科目一', source:'115年第二次·科目一', num:5, stem:'某地方政府導入 AI 系統審核低收入補助資格。系統已通過內部測試且準確率高，但民間團體指出不同族群核准率差異顯著。依《人工智慧基本法》精神，下列何者為最適當之優先作法？', options:{A:'要求廠商提出無歧視聲明，並持續觀察',B:'提升模型整體準確率，以降低錯誤影響',C:'進行偏誤影響評估並建立可解釋與申訴機制',D:'因尚無大量申訴，暫不調整現行制度'}, answer:'C'},
+  {id:'s2-1-6', subject:'科目一', source:'115年第二次·科目一', num:6, stem:'某 AI 新創公司申請 AI 系統認證，並聲稱其產品已通過我國「AI 產品與系統評測中心」之生成式 AI 評測。下列何者不屬於該中心之評測項目？', options:{A:'資安（Secure）',B:'公平性（Fair）',C:'效率性（Efficiency）',D:'可靠性（Reliability）'}, answer:'C'},
+  {id:'s2-1-7', subject:'科目一', source:'115年第二次·科目一', num:7, stem:'某媒體集團計畫自行訓練一套生成式 AI 系統，用於自動產出新聞摘要與評論內容。請問下列哪一項措施最應該在模型訓練階段優先落實，以降低有害或偏頗內容的風險？', options:{A:'確保訓練資料來源多元，並經過嚴格的內容清洗與偏見過濾，以減少模型學習到有害或偏頗資訊的風險',B:'完全避免使用任何外部文本資料，以降低模型學習到不當內容的可能性',C:'僅使用公司內部的新聞稿與公告進行訓練，確保資料來源可控且符合企業立場',D:'限制模型僅能產出固定格式的內容，從輸出端約束模型避免生成不當資訊'}, answer:'A'},
+  {id:'s2-1-8', subject:'科目一', source:'115年第二次·科目一', num:8, stem:'某保險公司規劃推出一套 AI 核保輔助系統。依據金融機構運用人工智慧技術作業規範，下列何者不屬於該規範要求金融機構必要揭露的事項？', options:{A:'詳細公開本系統所採用的機器學習模型架構與完整訓練資料內容',B:'說明本服務的適用對象與用途範圍，使消費者了解系統的使用限制與服務邊界',C:'說明當消費者對 AI 核保結果有異議時，是否提供人工複核或申訴管道',D:'告知消費者本次核保審查結果係由 AI 系統自動完成，非人工逐案審核'}, answer:'A'},
+  {id:'s2-1-9', subject:'科目一', source:'115年第二次·科目一', num:9, stem:'某大型醫院導入 AI 輔助診斷系統，院方陸續收到三類回饋：①放射科醫師反映無法理解系統判斷依據；②委員會發現系統對特定族裔病患誤診率顯著偏高；③資安部門指出病患個資在未告知情況下被納入模型再訓練。依據 AI 倫理五大核心原則，上述三類問題分別對應哪一項原則的違反？', options:{A:'①違反安全性、②違反問責性、③違反透明性',B:'①違反隱私性、②違反安全性、③違反公平性',C:'①違反公平性、②違反透明性、③違反問責性',D:'①違反透明性、②違反公平性、③違反隱私性'}, answer:'D'},
+  {id:'s2-1-10', subject:'科目一', source:'115年第二次·科目一', num:10, stem:'某市政府環保局計畫建立空氣品質監測 AI 系統，需整合全市 5 萬個感測器的即時數據，並持續接收氣象、交通與工廠排放等資料。就大數據特性分析，下列何者最能說明此專案面臨的主要挑戰組合？', options:{A:'Volume 與 Velocity，因為資料量龐大且持續高速產生',B:'Variety 與 Veracity，因為資料來源多元且需確保正確性',C:'Velocity 與 Value，因為需即時判斷資料是否具有分析價值',D:'Volume 與 Value，因為需從大量資料中篩選出有用資訊'}, answer:'A'},
+  {id:'s2-1-11', subject:'科目一', source:'115年第二次·科目一', num:11, stem:'某保險公司建立理賠風險預測模型時，資料科學家提出以「性別」作為預測愛滋病毒感染風險的輸入特徵之一。下列哪一項理由最能說明此作法不適當？', options:{A:'性別為類別型變數，需進行編碼轉換才能輸入模型，增加前處理複雜度',B:'性別特徵在資料集中可能存在缺失值，影響模型訓練的穩定性',C:'以性別作為感染風險的代理特徵，會強化對特定族群的歧視性標籤，違反公平性原則',D:'性別特徵與感染風險之間的統計相關性有限，可能降低模型預測效能'}, answer:'C'},
+  {id:'s2-1-12', subject:'科目一', source:'115年第二次·科目一', num:12, stem:'某製造業導入 AI 進行生產排程，需整合 ERP 訂單資料、設備感測器產生的連續數值紀錄，以及維修技師手寫異常描述（掃描為 PDF）。下列何者最能正確對應其資料型態？', options:{A:'ERP 訂單資料為半結構化、感測器數值為結構化、維修文字描述為非結構化',B:'ERP 訂單資料為結構化、感測器數值為結構化、維修文字描述為非結構化',C:'ERP 訂單資料為結構化、感測器數值為非結構化、維修文字描述為半結構化',D:'三者皆屬結構化資料，因為都可以轉換為數值格式後進行分析'}, answer:'B'},
+  {id:'s2-1-13', subject:'科目一', source:'115年第二次·科目一', num:13, stem:'某銀行建立機器學習模型預測客戶的貸款違約風險。「職業類別」欄位包含「工程師、教師、業務、自由業」等類別，計畫直接輸入線性模型。下列哪一種編碼方式最可能導致模型錯誤解讀類別之間的關係？', options:{A:'One-Hot Encoding',B:'Binary Encoding',C:'Target Encoding',D:'Label Encoding'}, answer:'D'},
+  {id:'s2-1-14', subject:'科目一', source:'115年第二次·科目一', num:14, stem:'某能源公司以過去三年每小時用電資料建立需求預測模型，並以 5-fold 交叉驗證評估，但上線後誤差偏高。下列何者最能說明使用標準 k-fold 交叉驗證的根本問題？', options:{A:'k-fold 交叉驗證需要的計算資源過大，不適合處理三年以上的長期資料',B:'k-fold 交叉驗證會隨機分割資料，使訓練集中可能包含比測試集更晚的時間點，破壞時間依賴性',C:'k-fold 交叉驗證的折數設定過少，應改為 10-fold 以提升驗證穩定性',D:'k-fold 交叉驗證僅適用於分類問題，不適合電力需求這類連續數值預測任務'}, answer:'B'},
+  {id:'s2-1-15', subject:'科目一', source:'115年第二次·科目一', num:15, stem:'某醫療院所建置病患再住院風險預測模型，特徵包含「年齡」、「體重」、「血壓數值」及「診斷類別代碼」。下列何種模型對特徵尺度最不敏感、最適合在不進行標準化的情況下直接使用上述特徵進行訓練？', options:{A:'線性迴歸（Linear Regression）',B:'支援向量機（Support Vector Machine）',C:'K 近鄰演算法（K-Nearest Neighbors）',D:'決策樹（Decision Tree）'}, answer:'D'},
+  {id:'s2-1-16', subject:'科目一', source:'115年第二次·科目一', num:16, stem:'某企業集團在多個領域導入 AI 技術。請問下列哪一項最符合異常檢測（Anomaly Detection）的主要應用目標？', options:{A:'分析客戶的消費行為資料，將客群依偏好進行分群，以制定差異化行銷策略',B:'根據歷史交易與客戶資料，建立模型預測未來可能發生違約的客戶',C:'彙整企業各部門的營運數據，建立儀表板供管理層追蹤關鍵績效指標的變化',D:'從設備感測資料中，即時偵測出與正常運作模式顯著偏離的訊號，以預警可能發生的故障'}, answer:'D'},
+  {id:'s2-1-17', subject:'科目一', source:'115年第二次·科目一', num:17, stem:'某交通局計劃將公車乘客刷卡資料提供給學術機構進行通勤模式研究，該資料包含卡號、上下車時間、路線編號等欄位，且需保留跨時間追蹤同一乘客行為能力。下列哪種處理方式最符合個人資料保護法的去識別化要求？', options:{A:'將卡號欄位全部刪除，僅保留上下車時間與路線編號',B:'對卡號進行 MD5 雜湊處理，並保留對照表供查詢',C:'將資料彙總為每日各路線總乘客數統計',D:'將卡號替換為隨機編號，且不保留任何對應關係'}, answer:'D'},
+  {id:'s2-2-1', subject:'科目二', source:'115年第二次·科目二', num:1, stem:'一家會計師事務所希望透過 Low-Code 工具，自動處理客戶提交的各類費用報銷單據，格式涵蓋手寫、PDF 掃描、電子發票等多種形式。方案甲為「直接呼叫基礎語言模型 API 進行單據內容解析與分類」，方案乙為「使用內建 RAG 元件，比對過去已正確分類的報銷單據」。下列分析何者最為正確？', options:{A:'方案甲優於方案乙，因為基礎語言模型具備更廣泛的通用知識，足以應對所有格式變化',B:'方案乙優於方案甲，因為 RAG 能提供歷史分類案例作為參考上下文，顯著提升非結構化文件的分類準確率',C:'兩者效果相同，差異僅在於系統複雜度，應優先選擇建置較簡單的方案甲',D:'可透過預先設定固定分類規則的方式處理報銷單據，以提升處理效率並降低系統複雜度'}, answer:'B'},
+  {id:'s2-2-2', subject:'科目二', source:'115年第二次·科目二', num:2, stem:'某客服主管希望在 Low-Code 平台中設定自動化流程：當客戶訊息被 AI 判定為「退費意圖」，且退費金額大於 10,000 元時，即自動發送緊急通知給主管。此需求最可能透過下列哪一種元件實現？', options:{A:'條件分支（Branching / Router），依據多重條件判斷流程走向',B:'資料格式化（Formatter），用於整理與轉換流程中的資料格式',C:'迭代／迴圈（Iterator），逐筆處理多筆資料並依序執行流程',D:'陣列聚合器（Array Aggregator），將多筆資料整合後再進行後續處理'}, answer:'A'},
+  {id:'s2-2-3', subject:'科目二', source:'115年第二次·科目二', num:3, stem:'某人資部門使用 Dify 平台建立了一個 AI 面試輔助機器人。測試時發現，機器人完全無法記住同一位應徵者在五分鐘前說過的話，每次回應都像是全新對話。以下哪個措施能從根本上解決此問題？', options:{A:'提升語言模型的溫度參數（Temperature）',B:'在每次 API 請求中，手動將歷史對話內容一併打包送入模型進行推理',C:'改用具備更多參數的大型多模態模型，以強化跨輪對話的理解能力',D:'為伺服器增加記憶體容量，擴充系統可儲存的對話快取空間'}, answer:'B'},
+  {id:'s2-2-4', subject:'科目二', source:'115年第二次·科目二', num:4, stem:'在使用 API 串接生成式 AI 服務時，Token 會影響模型的計費。請問下列何者最正確敘述 Token 在 LLM 應用中的意義？', options:{A:'Token 是模型將文字切分後的基本單位，通常與字詞或子詞對應，文件長度與 Token 數量具有一定關聯性',B:'Token 是模型用來表示整段文字語意的向量單位，用於理解輸入內容的語意結構',C:'Token 的數量會影響模型的輸入輸出長度與計費，而上下文長度受限於模型可處理的最大 Token 數量',D:'Token 只影響模型的運算速度，不影響 API 的使用成本'}, answer:'C'},
+  {id:'s2-2-5', subject:'科目二', source:'115年第二次·科目二', num:5, stem:'一家連鎖零售業者使用某封閉式 No-Code 平台多年，該平台資料採專有格式儲存，匯出功能有限，且未提供標準 API 支援。長期而言，該企業最可能面臨下列何種風險？', options:{A:'員工需具備撰寫進階程式語法的能力，才能持續使用該平台進行系統操作',B:'隨著系統使用時間增加，平台運算效能將逐漸下降，影響營運效率',C:'系統運作過程中較容易發生資安漏洞，導致資料外洩風險提高',D:'企業在未來更換系統時，將因資料與功能難以轉移而高度依賴原平台'}, answer:'D'},
+  {id:'s2-2-6', subject:'科目二', source:'115年第二次·科目二', num:6, stem:'某物流公司評估導入 No-Code／Low-Code 平台，希望能與現有的 ERP 系統、倉儲管理系統及客戶通知平台進行資料串接。若主要考量系統整合能力，下列哪一項平台特性最能滿足此整合需求？', options:{A:'平台是否提供強制將所有應用程式部署於地端伺服器的選項，以確保資料不外流',B:'平台是否具備豐富的 API 介接能力、Webhooks 機制與開放式架構，能順暢串接既有系統',C:'平台是否內建將圖形化流程還原為原始程式碼的編譯工具，以便未來自行維護',D:'平台是否採用封閉式架構設計，以降低外部系統整合所帶來的安全風險'}, answer:'B'},
+  {id:'s2-2-7', subject:'科目二', source:'115年第二次·科目二', num:7, stem:'某企業導入 No-Code／Low-Code 平台後，發現各部門可快速開發 AI 應用，但同時產生大量重複功能之應用程式，且模型使用方式不一致，導致治理困難。若企業希望在維持「AI 民主化」前提下改善此問題，下列何者最適當之作法？', options:{A:'全面禁止業務單位自行開發 AI 應用，統一由資訊部門負責',B:'建立應用開發與模型使用之治理規範與共用標準',C:'停止使用 No-Code／Low-Code 工具，改採傳統開發模式',D:'限制 AI 應用僅能用於單一部門內部使用'}, answer:'B'},
+  {id:'s2-2-8', subject:'科目二', source:'115年第二次·科目二', num:8, stem:'在自動化工作流程中，Webhook 是一種由事件觸發、系統會主動回應的機制，請問下列何者最符合此運作邏輯？', options:{A:'你在訂位平台設定「開放提醒」，系統每隔 10 分鐘會自動幫你重新查詢各餐廳空位狀況，若有變動再通知你',B:'餐廳將每日訂位與候位資料整理至公開看板，你可以隨時打開查看最新狀態',C:'你在餐廳留下聯絡方式並設定偏好條件，當有符合條件的空位釋出時，餐廳會依照事先約定方式直接將資訊傳送給你',D:'你加入餐廳的會員系統，餐廳會定期寄送電子報，內容包含近期優惠與部分訂位統計資訊'}, answer:'C'},
+  {id:'s2-2-9', subject:'科目二', source:'115年第二次·科目二', num:9, stem:'某紡織品製造公司需建立品質控制流程：當 AI 系統檢測到瑕疵產品時，自動通知品管人員、更新庫存系統，並生成品質報告。公司資訊人力僅兩人，若希望在不導入大型企業系統的情況下，快速完成流程建置，下列何者最適合？', options:{A:'使用 No-Code 工具串接 AI 檢測、通知與報表功能，快速建立自動化流程',B:'委託外部專業團隊，依公司需求客製化所有功能模組後再上線使用',C:'導入具流程自動化功能的 SaaS 平台，並進行系統整合與客製化設定',D:'使用試算表與簡易腳本輔助記錄與通知，逐步優化現有人工流程'}, answer:'A'},
+  {id:'s2-2-10', subject:'科目二', source:'115年第二次·科目二', num:10, stem:'某家企業希望開發股票交易輔助工具，要求該工具需要在接收到市場報價資料的 50 毫秒內完成訊號判斷與下單指令，且每秒需處理超過一萬筆高併發交易。若選用 Low-Code 平台開發，最難克服的先天限制為何？', options:{A:'Low-Code 平台無法串接任何金融市場的外部 API，因此無法獲取即時報價資料',B:'Low-Code 平台無法串接任何券商平台的下單 API，因此無法進行即時交易',C:'Low-Code 底層封裝通用框架，在毫秒級延遲與超高吞吐量的極限效能場景中，難以進行深度底層優化',D:'Low-Code 平台無法建立即時更新的使用者介面，無法顯示動態報價資訊'}, answer:'C'},
+  {id:'s2-2-11', subject:'科目二', source:'115年第二次·科目二', num:11, stem:'某中小企業行銷部門主管希望在不需高度依賴 IT 支援的情況下，快速建立一套能自動分析顧客問卷回饋並進行情緒分類的系統。下列何者最能說明 AutoML 在此情境下的核心優勢？', options:{A:'AutoML 仍需使用者熟悉 Python 與深度學習框架，否則無法進行模型訓練',B:'AutoML 可自動完成模型選擇、特徵處理與訓練流程，使非技術背景人員也能快速建立並上線模型',C:'AutoML 僅適用於文字情緒分析，若應用於其他預測任務需重新開發系統',D:'AutoML 產出的模型無法直接應用於實務場景，仍需完全重寫程式才能使用'}, answer:'B'},
+  {id:'s2-2-12', subject:'科目二', source:'115年第二次·科目二', num:12, stem:'某電商平台導入 CLIP（Contrastive Language-Image Pre-training）模型，讓使用者能直接輸入文字描述來搜尋商品圖片。請問 CLIP 模型是透過哪一種方式來衡量文字描述與圖片之間的相符程度？', options:{A:'餘弦相似度（Cosine Similarity），計算文字與圖片在向量空間中的方向相似程度',B:'BLEU 分數，衡量文字描述與圖片標題之間的詞彙重疊程度',C:'交叉熵損失（Cross-Entropy Loss），用於衡量模型預測機率與實際標籤之間的差異',D:'F1 分數（F1 Score），綜合評估搜尋結果的精確率與召回率'}, answer:'A'},
+  {id:'s2-2-13', subject:'科目二', source:'115年第二次·科目二', num:13, stem:'某新創公司正在評估開發方式，希望讓非技術背景的業務同仁也能參與功能原型的快速開發，團隊討論採用 Vibe Coding 與 Low-Code 兩種方式。請問下列哪一項對於 Vibe Coding 與 Low-Code 的敘述最為正確？', options:{A:'兩者本質相同，差異僅在於 Vibe Coding 以對話介面取代視覺化拖拉操作，最終產出的程式碼品質與可維護性並無顯著差異',B:'Vibe Coding 需要開發者具備一定的程式語言基礎才能有效審閱 AI 產出的程式碼，因此與 Low-Code 平台相比，不適合非技術人員使用',C:'Low-Code 平台因具備完整的視覺化與流程控制，較適合開發穩定且可維護的系統；Vibe Coding 則較適用於快速原型開發，難以支援結構複雜的正式應用系統',D:'Vibe Coding 透過自然語言驅動 AI 生成客製化程式碼，彈性較高但產出品質高度依賴提示詞的描述精準度；Low-Code 平台則透過預設元件組合快速建構，上限受限於平台本身支援的功能範疇'}, answer:'D'},
+  {id:'s2-2-14', subject:'科目二', source:'115年第二次·科目二', num:14, stem:'某軟體開發公司評估導入 Agentic Coding 工具（如 Claude Code），並規劃相應的人工審核機制。請問下列何者最能正確敘述此類工具在開發流程中，所支援的核心操作能力？', options:{A:'透過介面提供程式碼建議與修改建議，實際套用仍需由開發者手動確認與操作，無法直接對專案檔案進行自動變更',B:'可直接在開發環境中讀寫專案檔案、執行終端機指令（如測試與建置），並在適當情境下協助完成修改、測試與版本提交（commit）等多步驟開發流程',C:'著重於將需求轉換為系統設計與架構規劃，程式碼撰寫與整合仍主要由開發者負責，較少直接介入實際開發流程',D:'工具主要負責輔助開發者撰寫與優化程式碼，實際的測試、建置與版本控管流程仍需由開發者手動執行'}, answer:'B'}
+];
+
+let quizState = {};
+let currentSubjectFilter = 'all';
+let currentQ = null;
+
+function quizFilteredList(){
+  return currentSubjectFilter==='all' ? QUESTIONS : QUESTIONS.filter(q=>q.subject===currentSubjectFilter);
+}
+function pickNextQuestion(){
+  const list = quizFilteredList();
+  const weighted = [];
+  list.forEach(q=>{
+    const st = quizState[q.id] || {attempts:0, correct:0, lastResult:null};
+    let weight = 1;
+    if(st.attempts===0) weight = 4;
+    else if(st.lastResult===false) weight = 3;
+    else weight = 1;
+    for(let i=0;i<weight;i++) weighted.push(q);
+  });
+  return weighted[Math.floor(Math.random()*weighted.length)];
+}
+function loadQuizState(){
+  try{
+    const raw = localStorage.getItem('ipas-quiz-state-v1');
+    if(raw) quizState = JSON.parse(raw);
+  }catch(e){ quizState = {}; }
+}
+function saveQuizState(){
+  try{ localStorage.setItem('ipas-quiz-state-v1', JSON.stringify(quizState)); }catch(e){}
+}
+function renderQuizStats(){
+  const list = quizFilteredList();
+  let mastered=0, weak=0, unseen=0;
+  list.forEach(q=>{
+    const st = quizState[q.id];
+    if(!st || st.attempts===0) unseen++;
+    else if(st.lastResult===true) mastered++;
+    else weak++;
+  });
+  const el = document.getElementById('quiz-stats');
+  el.innerHTML =
+    '<span class="quiz-stat-pill">總題數 <b>'+list.length+'</b></span>'+
+    '<span class="quiz-stat-pill">熟練 <b>'+mastered+'</b></span>'+
+    '<span class="quiz-stat-pill">待加強 <b>'+weak+'</b></span>'+
+    '<span class="quiz-stat-pill">未作答 <b>'+unseen+'</b></span>';
+}
+function renderQuizCard(){
+  const card = document.getElementById('quiz-card');
+  card.innerHTML='';
+  if(!currentQ) currentQ = pickNextQuestion();
+  if(!currentQ){ card.innerHTML = '<div class="quiz-box">這個科目目前沒有題目。</div>'; return; }
+  const q = currentQ;
+  const box = document.createElement('div');
+  box.className='quiz-box';
+  const meta = document.createElement('div');
+  meta.className='quiz-meta';
+  meta.textContent = q.source+' 第'+q.num+'題';
+  box.appendChild(meta);
+  const stem = document.createElement('div');
+  stem.className='quiz-stem';
+  stem.textContent = q.stem;
+  box.appendChild(stem);
+  ['A','B','C','D'].forEach(letter=>{
+    const btn = document.createElement('button');
+    btn.className='quiz-opt';
+    btn.dataset.letter = letter;
+    btn.textContent = '('+letter+') '+q.options[letter];
+    btn.addEventListener('click', ()=>answerQuestion(letter));
+    box.appendChild(btn);
+  });
+  const fb = document.createElement('div');
+  fb.className='quiz-feedback';
+  fb.id='quiz-feedback';
+  box.appendChild(fb);
+  card.appendChild(box);
+}
+function answerQuestion(letter){
+  const q = currentQ;
+  const correct = (letter === q.answer);
+  const st = quizState[q.id] || {attempts:0, correct:0, lastResult:null};
+  st.attempts++;
+  if(correct) st.correct++;
+  st.lastResult = correct;
+  quizState[q.id] = st;
+  saveQuizState();
+
+  document.querySelectorAll('.quiz-opt').forEach(btn=>{
+    btn.disabled = true;
+    const optLetter = btn.dataset.letter;
+    if(optLetter === q.answer) btn.classList.add('correct');
+    else if(optLetter === letter) btn.classList.add('wrong');
+  });
+  const fb = document.getElementById('quiz-feedback');
+  fb.textContent = correct ? '答對了！' : ('答錯了，正確答案是 ('+q.answer+')');
+  fb.className = 'quiz-feedback ' + (correct?'ok':'no');
+  renderQuizStats();
+}
+function nextQuestion(){
+  currentQ = null;
+  renderQuizCard();
+}
+document.getElementById('quiz-tabs').querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.getElementById('quiz-tabs').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentSubjectFilter = btn.dataset.tab;
+    uiState.quizSubject = currentSubjectFilter;
+    saveUiState();
+    currentQ = null;
+    renderQuizStats();
+    renderQuizCard();
+  });
+});
+document.getElementById('quiz-next-btn').addEventListener('click', nextQuestion);
+
+// ---------- boot ----------
+function boot(){
+  loadUiState();
+  loadTrackerState();
+  loadQuizState();
+
+  const today = todayMidnight();
+  selectedKey = dkey(today.getFullYear(), today.getMonth()+1, today.getDate());
+
+  currentCalMonth = uiState.calMonth || 7;
+  document.getElementById('cal-tabs').querySelectorAll('.tab-btn').forEach(b=>{
+    b.classList.toggle('active', (b.dataset.tab==='cal-7') === (currentCalMonth===7));
+  });
+
+  currentSubjectFilter = uiState.quizSubject || 'all';
+  document.getElementById('quiz-tabs').querySelectorAll('.tab-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.tab === currentSubjectFilter);
+  });
+
+  const resTab = uiState.resTab || 'res-folders';
+  document.getElementById('res-tabs').querySelectorAll('.tab-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.tab === resTab);
+  });
+  document.querySelectorAll('#res-folders, #res-files').forEach(p=>p.classList.remove('active'));
+  const resPanel = document.getElementById(resTab);
+  if(resPanel) resPanel.classList.add('active');
+
+  switchView(uiState.activeView || 'view-today');
+  renderAll();
+  renderQuizCard();
+}
+
+boot();
 </script>
 </body>
 </html>
